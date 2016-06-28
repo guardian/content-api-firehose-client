@@ -1,7 +1,7 @@
 Content API Firehose Client
 ========================
 
-A client for the Guardian's [Content API] (http://explorer.capi.gutools.co.uk/) firehose.
+A client for the Guardian's [Content API] (http://explorer.capi.gutools.co.uk/) firehose - an events stream for all updates and deletes of Guardian content.
 
 ## Setup
 
