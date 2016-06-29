@@ -67,7 +67,7 @@ project's cloudformation file as so:
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:dynamodb:*:CAPI_ACCOUNT_NUMBER:table/content-api-firehose-v2-STAGE_APP_NAME-MODE-",
+                    "arn:aws:dynamodb:*:YOUR_ACCOUNT_NUMBER:table/content-api-firehose-v2-STAGE_APP_NAME-MODE-",
                     {
                       "Ref": "Stage"
                     },
@@ -101,10 +101,18 @@ project's cloudformation file as so:
 
 Once this has been done you will be able to create a `ContentApiFirehoseConsumer` in your application as such:
 
+ - STS_ROLE_TO_ASSUME - The cross account role to assume in order to read from the content api events stream. Ask 
+ anyone from the CAPI team to provide you with this. This should be stored by your application as a secret.
+
 ```scala
 
-  val credsProvider = new AWSCredentialsProviderChain(
+  val kinesisCredsProvider = new AWSCredentialsProviderChain(
     new ProfileCredentialsProvider("capi"),
+    new STSAssumeRoleSessionCredentialsProvider(STS_ROLE_TO_ASSUME, "capi")
+  )
+
+  val dynamoCredsProvider = new AWSCredentialsProviderChain(
+    new ProfileCredentialsProvider("YOUR_PROFILE_NAME"),
     new InstanceProfileCredentialsProvider()
   )
 
@@ -114,8 +122,8 @@ val contentApiFirehoseConsumer: ContentApiFirehoseConsumer = new ContentApiFireh
     suffix = None,
     streamName = "GET_STREAM_NAME_FROM_SOMEONE_IN_CAPI",
     stage = "PROD",
-    kinesisCredentialsProvider = credsProvider,
-    dynamoCredentialsProvider = credsProvider,
+    kinesisCredentialsProvider = kinesisCredsProvider,
+    dynamoCredentialsProvider = dynamoCredsProvider,
     awsRegion = "eu-west-1",
     logic: PublicationLogic // Your implementation of `PublicationLogic` - to provide behavior per event type.
 )
