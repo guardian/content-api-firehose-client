@@ -115,17 +115,21 @@ Once this has been done you will be able to create a `ContentApiFirehoseConsumer
     new ProfileCredentialsProvider("YOUR_PROFILE_NAME"),
     new InstanceProfileCredentialsProvider()
   )
-
-val contentApiFirehoseConsumer: ContentApiFirehoseConsumer = new ContentApiFirehoseConsumer(
-    app = "my-application",
-    mode: "live",
-    suffix = None,
+  
+  val kinesisStreamReaderConfig = KinesisStreamReaderConfig(
     streamName = "GET_STREAM_NAME_FROM_SOMEONE_IN_CAPI",
+    app = "my-application",
     stage = "PROD",
+    mode = "live",
+    suffix = None,
     kinesisCredentialsProvider = kinesisCredsProvider,
     dynamoCredentialsProvider = dynamoCredsProvider,
-    awsRegion = "eu-west-1",
-    logic: PublicationLogic // Your implementation of `PublicationLogic` - to provide behavior per event type.
+    awsRegion = "eu-west-1"
+  )
+
+val contentApiFirehoseConsumer: ContentApiFirehoseConsumer = new ContentApiFirehoseConsumer(
+    kinesisStreamReaderConfig
+    publicationLogic // Your implementation of `PublicationLogic` - to provide behavior per event type.
 )
 
 ```
@@ -134,4 +138,10 @@ Then all is left is to start consuming from the firehose.
 
 ```
 contentApiFirehoseConsumer.start()
+```
+
+And when you're finished:
+
+```
+contentApiFirehoseConsumer.shutdown()
 ```

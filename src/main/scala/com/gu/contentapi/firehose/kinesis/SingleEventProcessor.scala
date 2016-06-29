@@ -7,9 +7,6 @@ import com.typesafe.scalalogging.LazyLogging
 import com.twitter.scrooge.ThriftStruct
 import java.util.concurrent.atomic.{ AtomicInteger, AtomicLong }
 import java.util.{ List => JList }
-
-import com.gu.contentapi.firehose.kinesis.EventProcessor.EventWithSize
-
 import scala.collection.JavaConverters._
 import scala.concurrent.duration._
 import scala.util.{ Failure, Success }
@@ -34,15 +31,11 @@ abstract class EventProcessor[EventT <: ThriftStruct](
   }
 
   override def processRecords(records: JList[Record], checkpointer: IRecordProcessorCheckpointer): Unit = {
-    processRecordsIfActivated(records, checkpointer)
-  }
-
-  private def processRecordsIfActivated(records: JList[Record], checkpointer: IRecordProcessorCheckpointer): Unit = {
     val events = records.asScala.flatMap { record =>
       val buffer = record.getData
       val op = deserializeEvent(buffer)
       op match {
-        case Success(event) => Some(EventWithSize(event, buffer.array.length))
+        case Success(event) => Some(event)
         case Failure(e) => {
           logger.error(s"deserialization of event buffer failed: ${e.getMessage}", e)
           None
@@ -52,26 +45,6 @@ abstract class EventProcessor[EventT <: ThriftStruct](
 
     processEvents(events)
 
-    /*
-     Several errors can be encountered:
-     - Compression unsupported
-     The thrift bytes have been compressed with a compression algo which is not yet supported by porter.
-     - Thrift protocol decoding exception
-     The thrift format we are using for decoding the object is not compatible with the one that has been used to encode the message.
-     - Thrift transport exception
-     The byte buffer we are consuming has thrown an IO exception.
-     Recovering options are:
-     - Stop the processing of records for the porter instance
-     We stop to process the records using a scala.util.control.Breaks.breakable and an atomic boolean.
-     The processing could not be (re)enabled without restarting the instance.
-     - Ignore the record
-     We skip the record and continue to process the next one.
-     Given the ability we have to recreate new events in the stream by launching a reindex, or relaunching/resaving an article,
-     the most appropriate and simplest recovering option is to ignore the record.
-     Note that one of the drawback of the binary serialisation is that we do not know the content id associated to the event.
-     As a result any error reported on production should be considered as critical and fixed immediately.
-     */
-
     /* increment the record counter */
     recordsProcessedSinceCheckpoint.addAndGet(events.size)
 
@@ -80,7 +53,7 @@ abstract class EventProcessor[EventT <: ThriftStruct](
     }
   }
 
-  protected def processEvents(events: Seq[EventWithSize[EventT]]): Unit
+  protected def processEvents(events: Seq[EventT]): Unit
 
   /* Checkpoint after every X seconds or every Y records */
   private def shouldCheckpointNow =
@@ -108,12 +81,7 @@ abstract class EventProcessor[EventT <: ThriftStruct](
 
 trait SingleEventProcessor[EventT <: ThriftStruct] extends EventProcessor[EventT] {
 
-  override protected def processEvents(events: Seq[EventWithSize[EventT]]) = events foreach processEvent
-  protected def processEvent(eventWithSize: EventWithSize[EventT]): Unit
+  override protected def processEvents(events: Seq[EventT]) = events foreach processEvent
+  protected def processEvent(eventWithSize: EventT): Unit
 
-}
-
-object EventProcessor {
-
-  case class EventWithSize[EventT <: ThriftStruct](event: EventT, eventSize: Int)
 }
