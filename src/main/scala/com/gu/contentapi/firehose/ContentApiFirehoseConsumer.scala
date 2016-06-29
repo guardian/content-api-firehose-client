@@ -9,7 +9,7 @@ import com.gu.crier.model.event.v1.EventType.EnumUnknownEventType
 import com.gu.crier.model.event.v1.{ Event, EventPayload, EventType }
 
 class ContentApiFirehoseConsumer(
-  val app: String,
+    val app: String,
     val mode: String,
     val suffix: Option[String],
     val streamName: String,
