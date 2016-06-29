@@ -16,16 +16,7 @@ pomExtra := (
     </developer>
   </developers>
 )
-publishTo <<= version { v =>
-  val nexus = "https://oss.sonatype.org/"
-  if (v.trim.endsWith("SNAPSHOT"))
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-}
-publishMavenStyle := true
 publishArtifact in Test := false
-pomIncludeRepository := { _ => false }
 releasePublishArtifactsAction := PgpKeys.publishSigned.value
 organization := "com.gu"
 licenses := Seq("Apache v2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html"))
@@ -55,7 +46,7 @@ resolvers += "Guardian GitHub Repository" at "http://guardian.github.io/maven/re
 libraryDependencies ++= Seq(
   "com.gu" % "content-api-models" % "9.3",
   "com.amazonaws" % "amazon-kinesis-client" % "1.6.3",
-  "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.11.11",
+  "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.10.77",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
   "org.apache.thrift" % "libthrift" % "0.9.1",
   "com.twitter" %% "scrooge-core" % "4.6.0")
