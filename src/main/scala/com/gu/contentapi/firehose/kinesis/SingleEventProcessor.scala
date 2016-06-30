@@ -11,13 +11,13 @@ import scala.collection.JavaConverters._
 import scala.concurrent.duration._
 import scala.util.{ Failure, Success }
 
-abstract class EventProcessor[EventT <: ThriftStruct](
-  checkpointInterval: Duration = 30.seconds,
-  maxCheckpointBatchSize: Int = 20
-)
+abstract class EventProcessor[EventT <: ThriftStruct]
     extends IRecordProcessor
     with ThriftDeserializer[EventT]
     with LazyLogging {
+
+  val checkpointInterval: Duration
+  val maxCheckpointBatchSize: Int
 
   private[this] var shardId: String = _
 

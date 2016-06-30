@@ -9,21 +9,18 @@ import com.gu.crier.model.event.v1.{ Event, EventPayload, EventType }
 import scala.concurrent.duration._
 
 class ContentApiFirehoseConsumer(
-
     val kinesisStreamReaderConfig: KinesisStreamReaderConfig,
-    val logic: PublicationLogic,
-    val checkpointInterval: Duration = 30.second,
-    val maxCheckpointBatchSize: Int = 20
+    val logic: PublicationLogic
 
 ) extends KinesisStreamReader {
 
   val eventProcessorFactory = new IRecordProcessorFactory {
     override def createProcessor(): IRecordProcessor =
-      new ContentApiEventProcessor(checkpointInterval, maxCheckpointBatchSize, logic)
+      new ContentApiEventProcessor(kinesisStreamReaderConfig.checkpointInterval, kinesisStreamReaderConfig.maxCheckpointBatchSize, logic)
   }
 }
 
-class ContentApiEventProcessor(val checkpointInterval: Duration, val maxCheckpointBatchSize: Int, publicationLogic: PublicationLogic) extends SingleEventProcessor[Event] {
+class ContentApiEventProcessor(override val checkpointInterval: Duration, override val maxCheckpointBatchSize: Int, publicationLogic: PublicationLogic) extends SingleEventProcessor[Event] {
 
   val codec = Event
 
