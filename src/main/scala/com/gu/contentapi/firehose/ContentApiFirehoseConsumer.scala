@@ -30,8 +30,8 @@ class ContentApiEventProcessor(override val checkpointInterval: Duration, overri
       case EventType.Update | EventType.RetrievableUpdate =>
         event.payload.foreach { payload =>
           payload match {
-            case content: EventPayload.Content => publicationLogic.contentUpdate(content.content)
-            case content: EventPayload.RetrievableContent => publicationLogic.contentRetrievableUpdate(content)
+            case EventPayload.Content(content) => publicationLogic.contentUpdate(content)
+            case EventPayload.RetrievableContent(content) => publicationLogic.contentRetrievableUpdate(content)
             case UnknownUnionField(e) => logger.warn(s"Received an unknown event payload $e. You should possibly consider updating")
           }
         }
