@@ -1,7 +1,7 @@
 package com.gu.contentapi.firehose.client
 
 import com.gu.contentapi.client.model.v1.Content
-import com.gu.crier.model.event.v1.EventPayload.RetrievableContent
+import com.gu.crier.model.event.v1.RetrievableContent
 
 /**
  * Client interface to implement for providing logic to handle various types of events.
