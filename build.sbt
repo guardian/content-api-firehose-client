@@ -40,22 +40,14 @@ releaseProcess := Seq(
   pushChanges
 )
 
-scroogeThriftDependencies in Compile := Seq("content-api-models", "story-packages-model-thrift", "content-atom-model-thrift")
 resolvers += "Guardian GitHub Repository" at "http://guardian.github.io/maven/repo-releases"
 
 libraryDependencies ++= Seq(
-  "com.gu" % "content-api-models" % "9.3",
+  "com.gu" % "content-api-models-scala" % "9.9",
   "com.amazonaws" % "amazon-kinesis-client" % "1.6.3",
   "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.10.77",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
-  "org.apache.thrift" % "libthrift" % "0.9.1",
-  "com.twitter" %% "scrooge-core" % "4.6.0")
-
-
-// See: https://github.com/twitter/scrooge/issues/199
-scroogeThriftSources in Compile ++= {
-  (scroogeUnpackDeps in Compile).value.flatMap { dir => (dir ** "*.thrift").get }
-}
+  "com.twitter" %% "scrooge-core" % "4.5.0")
 
 initialize := {
   val _ = initialize.value
