@@ -3,6 +3,7 @@ import sbtrelease.ReleaseStateTransformations._
 name:= "content-api-firehose-client"
 organization := "com.gu"
 scalaVersion := "2.11.8"
+crossPaths := false
 scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
 scalacOptions in doc in Compile := Nil
 
