@@ -6,7 +6,7 @@ import com.gu.crier.model.event.v1.RetrievableContent
 /**
  * Client interface to implement for providing logic to handle various types of events.
  */
-trait PublicationLogic {
+trait StreamListener {
 
   /**
    * When content is updated or created on the Guardian an `update` event will be sent to the events stream. This
