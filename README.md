@@ -129,7 +129,7 @@ Once this has been done you will be able to create a `ContentApiFirehoseConsumer
 
 val contentApiFirehoseConsumer: ContentApiFirehoseConsumer = new ContentApiFirehoseConsumer(
     kinesisStreamReaderConfig
-    publicationLogic // Your implementation of `PublicationLogic` - to provide behavior per event type.
+    streamListener // Your implementation of `StreamListener` - to provide behavior per event type.
 )
 
 ```
