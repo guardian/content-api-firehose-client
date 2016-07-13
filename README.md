@@ -118,7 +118,7 @@ Once this has been done you will be able to create a `ContentApiFirehoseConsumer
   
   val kinesisStreamReaderConfig = KinesisStreamReaderConfig(
     streamName = "GET_STREAM_NAME_FROM_SOMEONE_IN_CAPI",
-    app = "my-application",
+    app = "my-application", // must match the table name in CrierDynamoDBPolicy
     stage = "PROD",
     mode = "live",
     suffix = None,
