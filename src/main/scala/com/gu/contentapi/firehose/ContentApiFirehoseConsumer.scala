@@ -1,26 +1,29 @@
 package com.gu.contentapi.firehose
 
-import com.amazonaws.services.kinesis.clientlibrary.interfaces.{ IRecordProcessor, IRecordProcessorFactory }
+import com.amazonaws.services.kinesis.clientlibrary.interfaces.{IRecordProcessor, IRecordProcessorFactory}
+import com.gu.contentapi.client.model.v1.Content
 import com.gu.contentapi.firehose.client.StreamListener
-import com.gu.contentapi.firehose.kinesis.{ KinesisStreamReader, KinesisStreamReaderConfig, SingleEventProcessor }
+import com.gu.contentapi.firehose.kinesis.{KinesisStreamReader, KinesisStreamReaderConfig, SingleEventProcessor}
 import com.gu.crier.model.event.v1.EventPayload.UnknownUnionField
 import com.gu.crier.model.event.v1.EventType.EnumUnknownEventType
-import com.gu.crier.model.event.v1.{ Event, EventPayload, EventType }
+import com.gu.crier.model.event.v1.{Event, EventPayload, EventType}
+
 import scala.concurrent.duration._
 
 class ContentApiFirehoseConsumer(
     val kinesisStreamReaderConfig: KinesisStreamReaderConfig,
-    val streamListener: StreamListener
+    val streamListener: StreamListener,
+    val filterProductionMonitoring: Boolean = false
 
 ) extends KinesisStreamReader {
 
   val eventProcessorFactory = new IRecordProcessorFactory {
     override def createProcessor(): IRecordProcessor =
-      new ContentApiEventProcessor(kinesisStreamReaderConfig.checkpointInterval, kinesisStreamReaderConfig.maxCheckpointBatchSize, streamListener)
+      new ContentApiEventProcessor(filterProductionMonitoring, kinesisStreamReaderConfig.checkpointInterval, kinesisStreamReaderConfig.maxCheckpointBatchSize, streamListener)
   }
 }
 
-class ContentApiEventProcessor(override val checkpointInterval: Duration, override val maxCheckpointBatchSize: Int, streamListener: StreamListener) extends SingleEventProcessor[Event] {
+class ContentApiEventProcessor(filterProductionMonitoring: Boolean, override val checkpointInterval: Duration, override val maxCheckpointBatchSize: Int, streamListener: StreamListener) extends SingleEventProcessor[Event] {
 
   val codec = Event
 
@@ -36,7 +39,7 @@ class ContentApiEventProcessor(override val checkpointInterval: Duration, overri
           }
         }
 
-      case EventType.Delete => streamListener.contentTakedown(event.payloadId)
+      case EventType.Delete if !(filterProductionMonitoring && event.payloadId.startsWith("production-monitoring")) => streamListener.contentTakedown(event.payloadId)
 
       case EnumUnknownEventType(e) => logger.warn(s"Received an unknown event type $e")
     }
