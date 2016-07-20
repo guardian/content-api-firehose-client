@@ -10,17 +10,18 @@ import scala.concurrent.duration._
 
 class ContentApiFirehoseConsumer(
     val kinesisStreamReaderConfig: KinesisStreamReaderConfig,
-    val streamListener: StreamListener
+    val streamListener: StreamListener,
+    val filterProductionMonitoring: Boolean = false
 
 ) extends KinesisStreamReader {
 
   val eventProcessorFactory = new IRecordProcessorFactory {
     override def createProcessor(): IRecordProcessor =
-      new ContentApiEventProcessor(kinesisStreamReaderConfig.checkpointInterval, kinesisStreamReaderConfig.maxCheckpointBatchSize, streamListener)
+      new ContentApiEventProcessor(filterProductionMonitoring, kinesisStreamReaderConfig.checkpointInterval, kinesisStreamReaderConfig.maxCheckpointBatchSize, streamListener)
   }
 }
 
-class ContentApiEventProcessor(override val checkpointInterval: Duration, override val maxCheckpointBatchSize: Int, streamListener: StreamListener) extends SingleEventProcessor[Event] {
+class ContentApiEventProcessor(filterProductionMonitoring: Boolean, override val checkpointInterval: Duration, override val maxCheckpointBatchSize: Int, streamListener: StreamListener) extends SingleEventProcessor[Event] {
 
   val codec = Event
 
@@ -30,7 +31,7 @@ class ContentApiEventProcessor(override val checkpointInterval: Duration, overri
       case EventType.Update | EventType.RetrievableUpdate =>
         event.payload.foreach { payload =>
           payload match {
-            case EventPayload.Content(content) => streamListener.contentUpdate(content)
+            case EventPayload.Content(content) if !(filterProductionMonitoring && content.id.startsWith("production-monitoring")) => streamListener.contentUpdate(content)
             case EventPayload.RetrievableContent(content) => streamListener.contentRetrievableUpdate(content)
             case UnknownUnionField(e) => logger.warn(s"Received an unknown event payload $e. You should possibly consider updating")
           }
