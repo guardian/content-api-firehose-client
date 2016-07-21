@@ -1,12 +1,12 @@
 package com.gu.contentapi.firehose
 
-import com.amazonaws.services.kinesis.clientlibrary.interfaces.{IRecordProcessor, IRecordProcessorFactory}
+import com.amazonaws.services.kinesis.clientlibrary.interfaces.{ IRecordProcessor, IRecordProcessorFactory }
 import com.gu.contentapi.client.model.v1.Content
 import com.gu.contentapi.firehose.client.StreamListener
-import com.gu.contentapi.firehose.kinesis.{KinesisStreamReader, KinesisStreamReaderConfig, SingleEventProcessor}
+import com.gu.contentapi.firehose.kinesis.{ KinesisStreamReader, KinesisStreamReaderConfig, SingleEventProcessor }
 import com.gu.crier.model.event.v1.EventPayload.UnknownUnionField
 import com.gu.crier.model.event.v1.EventType.EnumUnknownEventType
-import com.gu.crier.model.event.v1.{Event, EventPayload, EventType}
+import com.gu.crier.model.event.v1.{ Event, EventPayload, EventType }
 
 import scala.concurrent.duration._
 
@@ -39,7 +39,12 @@ class ContentApiEventProcessor(filterProductionMonitoring: Boolean, override val
           }
         }
 
-      case EventType.Delete if !(filterProductionMonitoring && event.payloadId.startsWith("production-monitoring")) => streamListener.contentTakedown(event.payloadId)
+      case EventType.Delete =>
+        if (filterProductionMonitoring && event.payloadId.startsWith("production-monitoring")) {
+          // do nothing.
+        } else {
+          streamListener.contentTakedown(event.payloadId)
+        }
 
       case EnumUnknownEventType(e) => logger.warn(s"Received an unknown event type $e")
     }
