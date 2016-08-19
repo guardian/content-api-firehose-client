@@ -29,6 +29,8 @@ trait KinesisStreamReader {
     )
       .withInitialPositionInStream(initialPosition)
       .withRegionName(kinesisStreamReaderConfig.awsRegion)
+      .withMaxRecords(kinesisStreamReaderConfig.maxRecords)
+      .withIdleTimeBetweenReadsInMillis(kinesisStreamReaderConfig.idleTimeBetweenReadsInMillis)
 
   /* Create a worker, which will in turn create one or more EventProcessors */
   lazy val worker = new Worker(
