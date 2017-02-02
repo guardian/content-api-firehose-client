@@ -33,7 +33,7 @@ class ContentApiEventProcessor(filterProductionMonitoring: Boolean, override val
       case EventType.Update | EventType.RetrievableUpdate =>
         event.payload.foreach { payload =>
           payload match {
-            case EventPayload.Content(content) => streamListener.contentUpdate(content)
+            case EventPayload.Content(content) if !(filterProductionMonitoring && content.id.startsWith("production-monitoring")) => streamListener.contentUpdate(content)
             case EventPayload.RetrievableContent(content) => streamListener.contentRetrievableUpdate(content)
             case UnknownUnionField(e) => logger.warn(s"Received an unknown event payload $e. You should possibly consider updating")
           }
