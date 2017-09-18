@@ -11,11 +11,9 @@ import com.gu.crier.model.event.v1.{ Event, EventPayload, EventType }
 import scala.concurrent.duration._
 
 class ContentApiFirehoseConsumer(
-    val kinesisStreamReaderConfig: KinesisStreamReaderConfig,
-    val streamListener: StreamListener,
-    val filterProductionMonitoring: Boolean = false
-
-) extends KinesisStreamReader {
+  val kinesisStreamReaderConfig: KinesisStreamReaderConfig,
+  val streamListener: StreamListener,
+  val filterProductionMonitoring: Boolean = false) extends KinesisStreamReader {
 
   val eventProcessorFactory = new IRecordProcessorFactory {
     override def createProcessor(): IRecordProcessor =
