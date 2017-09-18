@@ -35,6 +35,7 @@ class ContentApiEventProcessor(filterProductionMonitoring: Boolean, override val
           payload match {
             case EventPayload.Content(content) => streamListener.contentUpdate(content)
             case EventPayload.RetrievableContent(content) => streamListener.contentRetrievableUpdate(content)
+            case EventPayload.Atom(atom) => /* do nothing yet - TODO update */
             case UnknownUnionField(e) => logger.warn(s"Received an unknown event payload $e. You should possibly consider updating")
           }
         }
@@ -43,6 +44,7 @@ class ContentApiEventProcessor(filterProductionMonitoring: Boolean, override val
         if (filterProductionMonitoring && event.payloadId.startsWith("production-monitoring")) {
           // do nothing.
         } else {
+          /* TODO handle atom deletion here */
           streamListener.contentTakedown(event.payloadId)
         }
 

@@ -2,9 +2,12 @@ import sbtrelease.ReleaseStateTransformations._
 
 name:= "content-api-firehose-client"
 organization := "com.gu"
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.3"
+crossScalaVersions := Seq("2.11.11", scalaVersion.value)
 scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
 scalacOptions in doc in Compile := Nil
+
+releaseCrossBuild := true
 
 pomExtra := (
 <url>https://github.com/guardian/content-api-firehose-client</url>
@@ -43,11 +46,11 @@ releaseProcess := Seq(
 resolvers += "Guardian GitHub Repository" at "http://guardian.github.io/maven/repo-releases"
 
 libraryDependencies ++= Seq(
-  "com.gu" % "content-api-models-scala" % "11.1",
-  "com.amazonaws" % "amazon-kinesis-client" % "1.6.3",
+  "com.gu" %% "content-api-models-scala" % "11.26",
+  "com.amazonaws" % "amazon-kinesis-client" % "1.6.4",
   "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.10.77",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
-  "com.twitter" %% "scrooge-core" % "4.5.0")
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.6.0",
+  "com.twitter" %% "scrooge-core" % "4.18.0")
 
 initialize := {
   val _ = initialize.value
