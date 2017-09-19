@@ -12,9 +12,9 @@ import scala.concurrent.duration._
 import scala.util.{ Failure, Success }
 
 abstract class EventProcessor[EventT <: ThriftStruct]
-    extends IRecordProcessor
-    with ThriftDeserializer[EventT]
-    with LazyLogging {
+  extends IRecordProcessor
+  with ThriftDeserializer[EventT]
+  with LazyLogging {
 
   val checkpointInterval: Duration
   val maxCheckpointBatchSize: Int

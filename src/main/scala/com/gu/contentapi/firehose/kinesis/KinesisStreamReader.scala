@@ -25,8 +25,7 @@ trait KinesisStreamReader {
       kinesisStreamReaderConfig.kinesisCredentialsProvider,
       kinesisStreamReaderConfig.dynamoCredentialsProvider,
       null,
-      workerId
-    )
+      workerId)
       .withInitialPositionInStream(initialPosition)
       .withRegionName(kinesisStreamReaderConfig.awsRegion)
       .withMaxRecords(kinesisStreamReaderConfig.maxRecords)
@@ -37,8 +36,7 @@ trait KinesisStreamReader {
     eventProcessorFactory,
     config,
     new NullMetricsFactory(), // don't send metrics to CloudWatch because it's expensive and not very helpful
-    threadPool
-  )
+    threadPool)
 
   private lazy val threadPool = Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat(s"${getClass.getSimpleName}-$workerId-thread-%d").build())
 

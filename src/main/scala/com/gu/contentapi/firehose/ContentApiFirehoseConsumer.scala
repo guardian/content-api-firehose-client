@@ -11,11 +11,9 @@ import com.gu.crier.model.event.v1.{ Event, EventPayload, EventType }
 import scala.concurrent.duration._
 
 class ContentApiFirehoseConsumer(
-    val kinesisStreamReaderConfig: KinesisStreamReaderConfig,
-    val streamListener: StreamListener,
-    val filterProductionMonitoring: Boolean = false
-
-) extends KinesisStreamReader {
+  val kinesisStreamReaderConfig: KinesisStreamReaderConfig,
+  val streamListener: StreamListener,
+  val filterProductionMonitoring: Boolean = false) extends KinesisStreamReader {
 
   val eventProcessorFactory = new IRecordProcessorFactory {
     override def createProcessor(): IRecordProcessor =
@@ -35,6 +33,7 @@ class ContentApiEventProcessor(filterProductionMonitoring: Boolean, override val
           payload match {
             case EventPayload.Content(content) => streamListener.contentUpdate(content)
             case EventPayload.RetrievableContent(content) => streamListener.contentRetrievableUpdate(content)
+            case EventPayload.Atom(atom) => /* do nothing yet - TODO update */
             case UnknownUnionField(e) => logger.warn(s"Received an unknown event payload $e. You should possibly consider updating")
           }
         }
@@ -43,6 +42,7 @@ class ContentApiEventProcessor(filterProductionMonitoring: Boolean, override val
         if (filterProductionMonitoring && event.payloadId.startsWith("production-monitoring")) {
           // do nothing.
         } else {
+          /* TODO handle atom deletion here */
           streamListener.contentTakedown(event.payloadId)
         }
 
