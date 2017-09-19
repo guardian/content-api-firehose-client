@@ -53,7 +53,7 @@ releaseProcess := Seq(
 resolvers += "Guardian GitHub Repository" at "http://guardian.github.io/maven/repo-releases"
 
 libraryDependencies ++= Seq(
-  "com.gu" %% "content-api-models-scala" % "11.26",
+  "com.gu" %% "content-api-models-scala" % "11.25",
   "com.amazonaws" % "amazon-kinesis-client" % "1.6.4",
   "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.10.77",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.6.0",
