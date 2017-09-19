@@ -1,11 +1,13 @@
 Content API Firehose Client
 ============================
 
-A client for the Guardian's [Content API] (http://explorer.capi.gutools.co.uk/) firehose - an events stream for all updates and deletes of Guardian content.
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gu/content-api-firefhose-client_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gu/content-api-firehose-client_2.11) [![Build Status](https://travis-ci.org/guardian/content-api-firehose-client.svg?branch=master)](https://travis-ci.org/guardian/content-api-firehose-client)
+
+A client for the Guardian's [Content API](http://explorer.capi.gutools.co.uk/) firehose - an events stream for all updates and deletes of Guardian content.
 
 ## Setup
 
-Add the following line to your SBT build definition, and set the version number to be the latest from the [releases page] (https://github.com/guardian/content-api-firehose-client/releases):
+Add the following line to your SBT build definition, and set the version number to be the latest from the [releases page](https://github.com/guardian/content-api-firehose-client/releases):
 
 ```scala
 libraryDependencies += "com.gu" %% "content-api-firehose-client" % "x.y"
@@ -16,7 +18,7 @@ libraryDependencies += "com.gu" %% "content-api-firehose-client" % "x.y"
 In order to get started with reading from the content-api firehose you will need to provide us with your AWS account
 number so that we can provide you with permissions. To do so, you may speak to anyone within the content api/off platform
 team and they will be able to help. Or better yet, you can submit the PR yourself! You will need to provide a new 
-parameter to [this] (https://github.com/guardian/crier/blob/master/cloudformation.json) cloudformation file as so:
+parameter to [this](https://github.com/guardian/crier/blob/master/cloudformation.json) cloudformation file as so:
 
 ```
 "TEAM_NAMEAccountNumber": {
@@ -25,7 +27,7 @@ parameter to [this] (https://github.com/guardian/crier/blob/master/cloudformatio
 }
 ```
 
-And then add a corresponding assumeRole command to the [cross account role] (https://github.com/guardian/crier/blob/master/cloudformation.json#L100)
+And then add a corresponding assumeRole command to the [cross account role](https://github.com/guardian/crier/blob/master/cloudformation.json#L100)
 as such: 
 
 ```
