@@ -28,6 +28,13 @@ scmInfo := Some(ScmInfo(
   "scm:git:git@github.com:guardian/content-api-firehose-client.git"
 ))
 
+publishTo := Some(
+  if (isSnapshot.value)
+    Opts.resolver.sonatypeSnapshots
+  else
+    Opts.resolver.sonatypeStaging
+)
+
 releaseProcess := Seq(
   checkSnapshotDependencies,
   inquireVersions,
