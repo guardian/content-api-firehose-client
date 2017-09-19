@@ -56,7 +56,7 @@ libraryDependencies ++= Seq(
   "com.gu" %% "content-api-models-scala" % "11.25",
   "com.amazonaws" % "amazon-kinesis-client" % "1.6.4",
   "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.10.77",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.6.0",
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
   "com.twitter" %% "scrooge-core" % "4.18.0")
 
 initialize := {
