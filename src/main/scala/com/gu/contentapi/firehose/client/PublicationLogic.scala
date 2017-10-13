@@ -1,6 +1,7 @@
 package com.gu.contentapi.firehose.client
 
 import com.gu.contentapi.client.model.v1.Content
+import com.gu.contentatom.thrift.Atom
 import com.gu.crier.model.event.v1.RetrievableContent
 
 /**
@@ -33,5 +34,13 @@ trait StreamListener {
    * @param contentId
    */
   def contentTakedown(contentId: String): Unit
+
+  /**
+    * The CAPI now publishes `Atoms` as well as content, which have their own flow.  This event is called whenever an atom is updated
+    *
+    * @param atom
+    */
+
+  def atomUpdate(atom: Atom): Unit
 
 }
