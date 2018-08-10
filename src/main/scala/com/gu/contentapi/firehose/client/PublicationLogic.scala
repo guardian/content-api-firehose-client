@@ -36,10 +36,10 @@ trait StreamListener {
   def contentTakedown(contentId: String): Unit
 
   /**
-    * The CAPI now publishes `Atoms` as well as content, which have their own flow.  This event is called whenever an atom is updated
-    *
-    * @param atom
-    */
+   * The CAPI now publishes `Atoms` as well as content, which have their own flow.  This event is called whenever an atom is updated
+   *
+   * @param atom
+   */
 
   def atomUpdate(atom: Atom): Unit
 

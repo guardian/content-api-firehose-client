@@ -2,7 +2,7 @@ package com.gu.contentapi.firehose.kinesis
 
 import com.amazonaws.services.kinesis.model.Record
 import com.amazonaws.services.kinesis.clientlibrary.interfaces.{ IRecordProcessor, IRecordProcessorCheckpointer }
-import com.amazonaws.services.kinesis.clientlibrary.types.ShutdownReason
+import com.amazonaws.services.kinesis.clientlibrary.lib.worker.ShutdownReason
 import com.typesafe.scalalogging.LazyLogging
 import com.twitter.scrooge.ThriftStruct
 import java.util.concurrent.atomic.{ AtomicInteger, AtomicLong }
