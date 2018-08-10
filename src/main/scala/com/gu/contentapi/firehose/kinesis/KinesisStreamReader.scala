@@ -32,11 +32,12 @@ trait KinesisStreamReader {
       .withIdleTimeBetweenReadsInMillis(kinesisStreamReaderConfig.idleTimeBetweenReadsInMillis)
 
   /* Create a worker, which will in turn create one or more EventProcessors */
-  lazy val worker = new Worker(
-    eventProcessorFactory,
-    config,
-    new NullMetricsFactory(), // don't send metrics to CloudWatch because it's expensive and not very helpful
-    threadPool)
+  lazy val worker: Worker = new Worker.Builder()
+    .metricsFactory(new NullMetricsFactory())
+    .execService(threadPool)
+    .config(config)
+    .recordProcessorFactory(eventProcessorFactory)
+    .build()
 
   private lazy val threadPool = Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat(s"${getClass.getSimpleName}-$workerId-thread-%d").build())
 
