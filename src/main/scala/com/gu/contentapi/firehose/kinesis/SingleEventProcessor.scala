@@ -3,17 +3,18 @@ package com.gu.contentapi.firehose.kinesis
 import com.amazonaws.services.kinesis.model.Record
 import com.amazonaws.services.kinesis.clientlibrary.interfaces.{ IRecordProcessor, IRecordProcessorCheckpointer }
 import com.amazonaws.services.kinesis.clientlibrary.lib.worker.ShutdownReason
+import com.gu.thrift.serializer.ThriftDeserializer
 import com.typesafe.scalalogging.LazyLogging
-import com.twitter.scrooge.ThriftStruct
+import com.twitter.scrooge.{ ThriftStruct, ThriftStructCodec }
 import java.util.concurrent.atomic.{ AtomicInteger, AtomicLong }
 import java.util.{ List => JList }
 import scala.collection.JavaConverters._
 import scala.concurrent.duration._
-import scala.util.{ Failure, Success }
+import scala.concurrent.Await
+import scala.util.{ Try, Failure, Success }
 
-abstract class EventProcessor[EventT <: ThriftStruct]
+abstract class EventProcessor[EventT <: ThriftStruct: ThriftStructCodec]
   extends IRecordProcessor
-  with ThriftDeserializer[EventT]
   with LazyLogging {
 
   val checkpointInterval: Duration
@@ -32,8 +33,8 @@ abstract class EventProcessor[EventT <: ThriftStruct]
 
   override def processRecords(records: JList[Record], checkpointer: IRecordProcessorCheckpointer): Unit = {
     val events = records.asScala.flatMap { record =>
-      val buffer = record.getData
-      val op = deserializeEvent(buffer)
+      val buffer = record.getData.array
+      val op = ThriftDeserializer.deserialize(buffer)
       op match {
         case Success(event) => Some(event)
         case Failure(e) => {
