@@ -8,6 +8,7 @@ import com.gu.contentapi.firehose.kinesis.{ KinesisStreamReader, KinesisStreamRe
 import com.gu.crier.model.event.v1.EventPayload.{ Atom, UnknownUnionField }
 import com.gu.crier.model.event.v1.EventType.EnumUnknownEventType
 import com.gu.crier.model.event.v1.{ Event, EventPayload, EventType, ItemType }
+import com.twitter.scrooge.ThriftStructCodec
 
 import scala.concurrent.duration._
 
@@ -22,9 +23,7 @@ class ContentApiFirehoseConsumer(
   }
 }
 
-class ContentApiEventProcessor(filterProductionMonitoring: Boolean, override val checkpointInterval: Duration, override val maxCheckpointBatchSize: Int, streamListener: StreamListener) extends SingleEventProcessor[Event] {
-
-  val codec = Event
+class ContentApiEventProcessor(filterProductionMonitoring: Boolean, override val checkpointInterval: Duration, override val maxCheckpointBatchSize: Int, streamListener: StreamListener)(implicit val codec: ThriftStructCodec[Event] = Event) extends SingleEventProcessor[Event] {
 
   override protected def processEvent(event: Event): Unit = {
     event.eventType match {
