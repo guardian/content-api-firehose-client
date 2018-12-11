@@ -2,8 +2,8 @@ import sbtrelease.ReleaseStateTransformations._
 
 name:= "content-api-firehose-client"
 organization := "com.gu"
-scalaVersion := "2.12.3"
-crossScalaVersions := Seq("2.11.11", scalaVersion.value)
+scalaVersion := "2.12.8"
+crossScalaVersions := Seq("2.11.12", scalaVersion.value)
 scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
 scalacOptions in doc in Compile := Nil
 
