@@ -53,12 +53,12 @@ releaseProcess := Seq(
 resolvers += "Guardian GitHub Repository" at "http://guardian.github.io/maven/repo-releases"
 
 libraryDependencies ++= Seq(
-  "com.gu" %% "content-api-models-scala" % "11.25",
-  "com.gu" %% "thrift-serializer" % "3.0.0",
+  "com.gu" %% "content-api-models-scala" % "14.1",
+  "com.gu" %% "thrift-serializer" % "4.0.0",
   "com.amazonaws" % "amazon-kinesis-client" % "1.9.1",
   "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.11.378",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
-  "com.twitter" %% "scrooge-core" % "4.18.0")
+  "com.twitter" %% "scrooge-core" % "19.3.0")
 
 initialize := {
   val _ = initialize.value
