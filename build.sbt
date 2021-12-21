@@ -50,7 +50,7 @@ releaseProcess := Seq(
   pushChanges
 )
 
-resolvers += "Guardian GitHub Repository" at "http://guardian.github.io/maven/repo-releases"
+resolvers += "Guardian GitHub Repository" at "https://guardian.github.io/maven/repo-releases"
 
 libraryDependencies ++= Seq(
   "com.gu" %% "content-api-models-scala" % "14.1",
