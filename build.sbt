@@ -5,7 +5,7 @@ organization := "com.gu"
 scalaVersion := "2.12.8"
 crossScalaVersions := Seq("2.11.12", scalaVersion.value)
 scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
-scalacOptions in doc in Compile := Nil
+Compile / doc / scalacOptions  := Nil
 
 releaseCrossBuild := true
 
@@ -19,7 +19,7 @@ pomExtra := (
     </developer>
   </developers>
 )
-publishArtifact in Test := false
+Test / publishArtifact  := false
 releasePublishArtifactsAction := PgpKeys.publishSigned.value
 organization := "com.gu"
 licenses := Seq("Apache v2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html"))
