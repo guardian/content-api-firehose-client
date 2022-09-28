@@ -58,9 +58,3 @@ libraryDependencies ++= Seq(
   "software.amazon.kinesis" % "amazon-kinesis-client" % "2.4.3",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.twitter" %% "scrooge-core" % "21.1.0")
-
-//initialize := {
-//  val _ = initialize.value
-//  assert(sys.props("java.specification.version") == "1.8",
-//    "Java 8 is required for this project.")
-//}
