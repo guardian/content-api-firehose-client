@@ -4,10 +4,10 @@ import com.gu.contentapi.firehose.client.StreamListener
 import com.gu.contentapi.firehose.kinesis.{ KinesisStreamReader, KinesisStreamReaderConfig, SingleEventProcessor }
 import com.gu.crier.model.event.v1.EventPayload.{ Atom, UnknownUnionField }
 import com.gu.crier.model.event.v1.EventType.EnumUnknownEventType
-import com.gu.crier.model.event.v1.{ Event, EventPayload, EventType, ItemType }
+import com.gu.crier.model.event.v1.{ Event, EventPayload, EventType }
 import com.twitter.scrooge.ThriftStructCodec
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider
-import software.amazon.kinesis.lifecycle.{ ShutdownInput, ShutdownReason }
+import software.amazon.kinesis.lifecycle.{ ShutdownReason }
 import software.amazon.kinesis.processor.{ ShardRecordProcessor, ShardRecordProcessorFactory }
 
 import scala.concurrent.duration._
@@ -33,6 +33,7 @@ class ContentApiEventProcessor(filterProductionMonitoring: Boolean, override val
           case EventPayload.Content(content) => streamListener.contentUpdate(content)
           case EventPayload.RetrievableContent(content) => streamListener.contentRetrievableUpdate(content)
           case EventPayload.Atom(atom) => streamListener.atomUpdate(atom)
+          case EventPayload.DeletedContent(content) => streamListener.contentDelete(content)
           case UnknownUnionField(e) => logger.warn(s"Received an unknown event payload $e. You should possibly consider updating")
         }
 
