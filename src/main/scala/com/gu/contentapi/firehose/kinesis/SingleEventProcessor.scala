@@ -5,12 +5,10 @@ import com.typesafe.scalalogging.LazyLogging
 import com.twitter.scrooge.{ ThriftStruct, ThriftStructCodec }
 import software.amazon.kinesis.lifecycle.ShutdownReason
 import software.amazon.kinesis.lifecycle.events.{ InitializationInput, LeaseLostInput, ProcessRecordsInput, ShardEndedInput, ShutdownRequestedInput }
-import software.amazon.kinesis.processor.{ Checkpointer, RecordProcessorCheckpointer, ShardRecordProcessor }
-import software.amazon.kinesis.retrieval.kpl.Messages.Record
+import software.amazon.kinesis.processor.{ RecordProcessorCheckpointer, ShardRecordProcessor }
 
 import java.util.concurrent.atomic.{ AtomicInteger, AtomicLong }
-import java.util.{ List => JList }
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.duration._
 import scala.util.{ Failure, Success, Try }
 
@@ -43,7 +41,7 @@ abstract class EventProcessor[EventT <: ThriftStruct: ThriftStructCodec]
           None
         }
       }
-    }
+    }.toSeq //.toSeq is required on Scala 2.13 as the comprehension above gives us a mutable.Buffer which is not directly compatible with Seq.
 
     processEvents(events)
 
