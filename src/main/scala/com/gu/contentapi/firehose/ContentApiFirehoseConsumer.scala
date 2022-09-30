@@ -18,7 +18,7 @@ class ContentApiFirehoseConsumer(
   val streamListener: StreamListener,
   val filterProductionMonitoring: Boolean = false) extends KinesisStreamReader {
 
-  val eventProcessorFactory = new ShardRecordProcessorFactory {
+  lazy val eventProcessorFactory = new ShardRecordProcessorFactory {
     override def shardRecordProcessor(): ShardRecordProcessor = new ContentApiEventProcessor(filterProductionMonitoring, kinesisStreamReaderConfig.checkpointInterval, kinesisStreamReaderConfig.maxCheckpointBatchSize, streamListener)
   }
 }
