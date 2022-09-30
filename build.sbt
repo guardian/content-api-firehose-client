@@ -6,6 +6,7 @@ scalaVersion := "2.12.17"
 crossScalaVersions := Seq(scalaVersion.value, "2.13.9")
 scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-release:8", "-Xfatal-warnings")
 Compile / doc / scalacOptions  := Nil
+credentials += Credentials(Path.userHome / ".sbt" / "sonatype_credentials")
 
 releaseCrossBuild := true
 
@@ -30,11 +31,16 @@ scmInfo := Some(ScmInfo(
 
 publishTo := Some(
   if (isSnapshot.value)
-    Opts.resolver.sonatypeSnapshots
+    Opts.resolver.sonatypeOssSnapshots.head
   else
     Opts.resolver.sonatypeStaging
 )
 
+ThisBuild / publishMavenStyle := true
+ThisBuild / pomIncludeRepository := { _ => false }
+
+releaseCrossBuild := true
+releasePublishArtifactsAction := PgpKeys.publishSigned.value
 releaseProcess := Seq(
   checkSnapshotDependencies,
   inquireVersions,
