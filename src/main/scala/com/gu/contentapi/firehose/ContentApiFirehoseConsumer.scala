@@ -1,25 +1,25 @@
 package com.gu.contentapi.firehose
 
-import com.amazonaws.services.kinesis.clientlibrary.interfaces.{ IRecordProcessor, IRecordProcessorCheckpointer, IRecordProcessorFactory }
-import com.amazonaws.services.kinesis.clientlibrary.lib.worker.ShutdownReason
-import com.gu.contentapi.client.model.v1.Content
 import com.gu.contentapi.firehose.client.StreamListener
 import com.gu.contentapi.firehose.kinesis.{ KinesisStreamReader, KinesisStreamReaderConfig, SingleEventProcessor }
 import com.gu.crier.model.event.v1.EventPayload.{ Atom, UnknownUnionField }
 import com.gu.crier.model.event.v1.EventType.EnumUnknownEventType
-import com.gu.crier.model.event.v1.{ Event, EventPayload, EventType, ItemType }
+import com.gu.crier.model.event.v1.{ Event, EventPayload, EventType }
 import com.twitter.scrooge.ThriftStructCodec
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider
+import software.amazon.kinesis.lifecycle.{ ShutdownReason }
+import software.amazon.kinesis.processor.{ ShardRecordProcessor, ShardRecordProcessorFactory }
 
 import scala.concurrent.duration._
 
 class ContentApiFirehoseConsumer(
   val kinesisStreamReaderConfig: KinesisStreamReaderConfig,
+  override val credentialsProvider: AwsCredentialsProvider,
   val streamListener: StreamListener,
   val filterProductionMonitoring: Boolean = false) extends KinesisStreamReader {
 
-  val eventProcessorFactory = new IRecordProcessorFactory {
-    override def createProcessor(): IRecordProcessor =
-      new ContentApiEventProcessor(filterProductionMonitoring, kinesisStreamReaderConfig.checkpointInterval, kinesisStreamReaderConfig.maxCheckpointBatchSize, streamListener)
+  lazy val eventProcessorFactory = new ShardRecordProcessorFactory {
+    override def shardRecordProcessor(): ShardRecordProcessor = new ContentApiEventProcessor(filterProductionMonitoring, kinesisStreamReaderConfig.checkpointInterval, kinesisStreamReaderConfig.maxCheckpointBatchSize, streamListener)
   }
 }
 
@@ -33,6 +33,7 @@ class ContentApiEventProcessor(filterProductionMonitoring: Boolean, override val
           case EventPayload.Content(content) => streamListener.contentUpdate(content)
           case EventPayload.RetrievableContent(content) => streamListener.contentRetrievableUpdate(content)
           case EventPayload.Atom(atom) => streamListener.atomUpdate(atom)
+          case EventPayload.DeletedContent(content) => streamListener.contentDelete(content)
           case UnknownUnionField(e) => logger.warn(s"Received an unknown event payload $e. You should possibly consider updating")
         }
 
@@ -48,8 +49,7 @@ class ContentApiEventProcessor(filterProductionMonitoring: Boolean, override val
     }
   }
 
-  override def shutdown(checkpointer: IRecordProcessorCheckpointer, shutdownReason: ShutdownReason): Unit = {
+  override def shutdown(shutdownReason: ShutdownReason): Unit = {
     logger.info(s"EventProcessor is shutting down: shutdown state is $shutdownReason")
   }
-
 }

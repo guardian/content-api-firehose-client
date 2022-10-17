@@ -2,9 +2,9 @@ import sbtrelease.ReleaseStateTransformations._
 
 name:= "content-api-firehose-client"
 organization := "com.gu"
-scalaVersion := "2.12.8"
-crossScalaVersions := Seq("2.11.12", scalaVersion.value)
-scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
+scalaVersion := "2.12.17"
+crossScalaVersions := Seq(scalaVersion.value, "2.13.8")
+scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-release:8", "-Xfatal-warnings")
 Compile / doc / scalacOptions  := Nil
 
 releaseCrossBuild := true
@@ -30,11 +30,16 @@ scmInfo := Some(ScmInfo(
 
 publishTo := Some(
   if (isSnapshot.value)
-    Opts.resolver.sonatypeSnapshots
+    Opts.resolver.sonatypeOssSnapshots.head
   else
     Opts.resolver.sonatypeStaging
 )
 
+ThisBuild / publishMavenStyle := true
+ThisBuild / pomIncludeRepository := { _ => false }
+
+releaseCrossBuild := true
+releasePublishArtifactsAction := PgpKeys.publishSigned.value
 releaseProcess := Seq(
   checkSnapshotDependencies,
   inquireVersions,
@@ -53,15 +58,8 @@ releaseProcess := Seq(
 resolvers += "Guardian GitHub Repository" at "https://guardian.github.io/maven/repo-releases"
 
 libraryDependencies ++= Seq(
-  "com.gu" %% "content-api-models-scala" % "14.1",
-  "com.gu" %% "thrift-serializer" % "4.0.0",
-  "com.amazonaws" % "amazon-kinesis-client" % "1.9.1",
-  "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.11.378",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
-  "com.twitter" %% "scrooge-core" % "19.3.0")
-
-initialize := {
-  val _ = initialize.value
-  assert(sys.props("java.specification.version") == "1.8",
-    "Java 8 is required for this project.")
-}
+  "com.gu" %% "content-api-models-scala" % "17.3.0",
+  "com.gu" %% "thrift-serializer" % "5.0.0-SNAPSHOT",
+  "software.amazon.kinesis" % "amazon-kinesis-client" % "2.4.3",
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
+  "com.twitter" %% "scrooge-core" % "21.1.0")

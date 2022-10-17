@@ -1,6 +1,7 @@
 package com.gu.contentapi.firehose.kinesis
 
-import com.amazonaws.auth.AWSCredentialsProvider
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider
+
 import scala.concurrent.duration._
 
 case class KinesisStreamReaderConfig(
@@ -9,8 +10,8 @@ case class KinesisStreamReaderConfig(
   stage: String,
   mode: String,
   suffix: Option[String],
-  kinesisCredentialsProvider: AWSCredentialsProvider,
-  dynamoCredentialsProvider: AWSCredentialsProvider,
+  kinesisCredentialsProvider: AwsCredentialsProvider,
+  dynamoCredentialsProvider: AwsCredentialsProvider,
   awsRegion: String,
   checkpointInterval: Duration = 30.second,
   maxCheckpointBatchSize: Int = 20,

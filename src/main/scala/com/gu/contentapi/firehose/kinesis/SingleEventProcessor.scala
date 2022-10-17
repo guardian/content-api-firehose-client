@@ -1,20 +1,19 @@
 package com.gu.contentapi.firehose.kinesis
 
-import com.amazonaws.services.kinesis.model.Record
-import com.amazonaws.services.kinesis.clientlibrary.interfaces.{ IRecordProcessor, IRecordProcessorCheckpointer }
-import com.amazonaws.services.kinesis.clientlibrary.lib.worker.ShutdownReason
 import com.gu.thrift.serializer.ThriftDeserializer
 import com.typesafe.scalalogging.LazyLogging
 import com.twitter.scrooge.{ ThriftStruct, ThriftStructCodec }
+import software.amazon.kinesis.lifecycle.ShutdownReason
+import software.amazon.kinesis.lifecycle.events.{ InitializationInput, LeaseLostInput, ProcessRecordsInput, ShardEndedInput, ShutdownRequestedInput }
+import software.amazon.kinesis.processor.{ RecordProcessorCheckpointer, ShardRecordProcessor }
+
 import java.util.concurrent.atomic.{ AtomicInteger, AtomicLong }
-import java.util.{ List => JList }
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.duration._
-import scala.concurrent.Await
-import scala.util.{ Try, Failure, Success }
+import scala.util.{ Failure, Success, Try }
 
 abstract class EventProcessor[EventT <: ThriftStruct: ThriftStructCodec]
-  extends IRecordProcessor
+  extends ShardRecordProcessor
   with LazyLogging {
 
   val checkpointInterval: Duration
@@ -26,14 +25,14 @@ abstract class EventProcessor[EventT <: ThriftStruct: ThriftStructCodec]
   private[this] val lastCheckpointedAt = new AtomicLong(System.nanoTime())
   private[this] val recordsProcessedSinceCheckpoint = new AtomicInteger()
 
-  override def initialize(shardId: String): Unit = {
-    this.shardId = shardId
+  override def initialize(input: InitializationInput): Unit = {
+    this.shardId = input.shardId()
     logger.info(s"Initialized an event processor for shard $shardId")
   }
 
-  override def processRecords(records: JList[Record], checkpointer: IRecordProcessorCheckpointer): Unit = {
-    val events = records.asScala.flatMap { record =>
-      val buffer = record.getData.array
+  override def processRecords(input: ProcessRecordsInput): Unit = {
+    val events = input.records().asScala.flatMap { record =>
+      val buffer = record.data()
       val op = ThriftDeserializer.deserialize(buffer)
       op match {
         case Success(event) => Some(event)
@@ -42,7 +41,7 @@ abstract class EventProcessor[EventT <: ThriftStruct: ThriftStructCodec]
           None
         }
       }
-    }
+    }.toSeq //.toSeq is required on Scala 2.13 as the comprehension above gives us a mutable.Buffer which is not directly compatible with Seq.
 
     processEvents(events)
 
@@ -50,7 +49,7 @@ abstract class EventProcessor[EventT <: ThriftStruct: ThriftStructCodec]
     recordsProcessedSinceCheckpoint.addAndGet(events.size)
 
     if (shouldCheckpointNow) {
-      checkpoint(checkpointer)
+      checkpoint(input.checkpointer())
     }
   }
 
@@ -61,7 +60,7 @@ abstract class EventProcessor[EventT <: ThriftStruct: ThriftStructCodec]
     recordsProcessedSinceCheckpoint.get() >= maxCheckpointBatchSize ||
       lastCheckpointedAt.get() < System.nanoTime() - checkpointInterval.toNanos
 
-  private def checkpoint(checkpointer: IRecordProcessorCheckpointer) = {
+  private def checkpoint(checkpointer: RecordProcessorCheckpointer) = {
     /* Store our latest position in the stream */
     checkpointer.checkpoint()
 
@@ -70,14 +69,27 @@ abstract class EventProcessor[EventT <: ThriftStruct: ThriftStructCodec]
     recordsProcessedSinceCheckpoint.set(0)
   }
 
-  /* This method may be called by KCL, e.g. in case of shard splits/merges */
-  override def shutdown(checkpointer: IRecordProcessorCheckpointer, reason: ShutdownReason): Unit = {
-    if (reason == ShutdownReason.TERMINATE) {
-      checkpointer.checkpoint()
-    }
-    logger.info(s"Shutdown event processor for shard $shardId because $reason")
+  def leaseLost(leaseLostInput: LeaseLostInput): Unit = {
+    logger.info(s"Shutdown event processor for shard $shardId because lease was lost")
+    shutdown(ShutdownReason.LEASE_LOST)
   }
 
+  def shardEnded(shardEndedInput: ShardEndedInput): Unit = {
+    logger.info(s"Shutdown event processor for shard $shardId because the shard ended")
+    shutdown(ShutdownReason.SHARD_END)
+  }
+
+  def shutdownRequested(shutdownRequestedInput: ShutdownRequestedInput): Unit = {
+    shutdownRequestedInput.checkpointer().checkpoint()
+    logger.info(s"Shutdown event processor for shard $shardId because shutdown was requested")
+    shutdown(ShutdownReason.REQUESTED)
+  }
+
+  /**
+   * Subclass this method if you want to be informed of shutdown events.  The default implementation does nothing.
+   * @param reason ShutdownReason indicating why the shutdown occurred
+   */
+  def shutdown(reason: ShutdownReason): Unit = {}
 }
 
 trait SingleEventProcessor[EventT <: ThriftStruct] extends EventProcessor[EventT] {

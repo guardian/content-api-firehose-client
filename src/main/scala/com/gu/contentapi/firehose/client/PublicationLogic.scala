@@ -2,7 +2,7 @@ package com.gu.contentapi.firehose.client
 
 import com.gu.contentapi.client.model.v1.Content
 import com.gu.contentatom.thrift.Atom
-import com.gu.crier.model.event.v1.RetrievableContent
+import com.gu.crier.model.event.v1.{ DeletedContent, RetrievableContent }
 
 /**
  * Client interface to implement for providing logic to handle various types of events.
@@ -25,6 +25,12 @@ trait StreamListener {
    * @param content
    */
   def contentRetrievableUpdate(content: RetrievableContent): Unit
+
+  /**
+   * When content is deleted on the Guardian an update event will be sent to the events stream.
+   * @param content
+   */
+  def contentDelete(content: DeletedContent): Unit
 
   /**
    * When content is removed from the Guardian a `takedown` event will be sent to the events stream. We expect all
