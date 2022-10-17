@@ -4,7 +4,7 @@ name:= "content-api-firehose-client"
 organization := "com.gu"
 scalaVersion := "2.12.17"
 crossScalaVersions := Seq(scalaVersion.value, "2.13.8")
-scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-release:8", "-Xfatal-warnings")
+scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-target:8", "-Xfatal-warnings")
 Compile / doc / scalacOptions  := Nil
 
 releaseCrossBuild := true
