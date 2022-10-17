@@ -6,7 +6,6 @@ scalaVersion := "2.12.17"
 crossScalaVersions := Seq(scalaVersion.value, "2.13.8")
 scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-release:8", "-Xfatal-warnings")
 Compile / doc / scalacOptions  := Nil
-credentials += Credentials(Path.userHome / ".sbt" / "sonatype_credentials")
 
 releaseCrossBuild := true
 
