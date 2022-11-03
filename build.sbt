@@ -59,7 +59,7 @@ resolvers += "Guardian GitHub Repository" at "https://guardian.github.io/maven/r
 
 libraryDependencies ++= Seq(
   "com.gu" %% "content-api-models-scala" % "17.3.0",
-  "com.gu" %% "thrift-serializer" % "5.0.0-SNAPSHOT",
+  "com.gu" %% "thrift-serializer" % "5.0.0",
   "software.amazon.kinesis" % "amazon-kinesis-client" % "2.4.3",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.twitter" %% "scrooge-core" % "21.1.0")
