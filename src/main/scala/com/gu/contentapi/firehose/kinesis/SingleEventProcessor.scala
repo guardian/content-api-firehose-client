@@ -7,6 +7,8 @@ import software.amazon.kinesis.lifecycle.ShutdownReason
 import software.amazon.kinesis.lifecycle.events.{ InitializationInput, LeaseLostInput, ProcessRecordsInput, ShardEndedInput, ShutdownRequestedInput }
 import software.amazon.kinesis.processor.{ RecordProcessorCheckpointer, ShardRecordProcessor }
 
+import java.nio.charset.StandardCharsets
+import java.util.Base64
 import java.util.concurrent.atomic.{ AtomicInteger, AtomicLong }
 import scala.jdk.CollectionConverters._
 import scala.concurrent.duration._
@@ -38,6 +40,10 @@ abstract class EventProcessor[EventT <: ThriftStruct: ThriftStructCodec]
         case Success(event) => Some(event)
         case Failure(e) => {
           logger.error(s"deserialization of event buffer failed: ${e.getMessage}", e)
+          buffer.rewind()
+          val encoded = Base64.getEncoder.encode(buffer)
+          val b64string = new String(encoded.array(), StandardCharsets.ISO_8859_1)
+          logger.error(s"Offending binary content: $b64string")
           None
         }
       }
