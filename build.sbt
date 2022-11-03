@@ -4,7 +4,7 @@ name:= "content-api-firehose-client"
 organization := "com.gu"
 scalaVersion := "2.12.17"
 crossScalaVersions := Seq(scalaVersion.value, "2.13.10")
-scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-release:8", "-Xfatal-warnings")
+scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-Xfatal-warnings")
 Compile / doc / scalacOptions  := Nil
 
 releaseCrossBuild := true
@@ -56,10 +56,11 @@ releaseProcess := Seq(
 )
 
 resolvers += "Guardian GitHub Repository" at "https://guardian.github.io/maven/repo-releases"
+resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 
 libraryDependencies ++= Seq(
   "com.gu" %% "content-api-models-scala" % "17.3.0",
-  "com.gu" %% "thrift-serializer" % "5.0.0",
+  "com.gu" %% "thrift-serializer" % "5.0.1-SNAPSHOT",
   "software.amazon.kinesis" % "amazon-kinesis-client" % "2.4.3",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.twitter" %% "scrooge-core" % "21.1.0")
