@@ -1,2 +1,1 @@
-ThisBuild / version := "1.0.0"
-ThisBuild / versionScheme := Some(VersionScheme.SemVerSpec)
+version in ThisBuild := "1.0.0"
