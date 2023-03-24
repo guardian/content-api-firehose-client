@@ -58,6 +58,8 @@ releaseProcess := Seq(
 resolvers += "Guardian GitHub Repository" at "https://guardian.github.io/maven/repo-releases"
 resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 
+credentials += Credentials(Path.userHome / ".sbt" / "credentials")
+
 libraryDependencies ++= Seq(
   "com.gu" %% "content-api-models-scala" % "17.5.1",
   "com.gu" %% "thrift-serializer" % "5.0.2",
