@@ -59,8 +59,17 @@ resolvers += "Guardian GitHub Repository" at "https://guardian.github.io/maven/r
 resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 
 libraryDependencies ++= Seq(
-  "com.gu" %% "content-api-models-scala" % "17.3.0",
+  "com.gu" %% "content-api-models-scala" % "17.5.1",
   "com.gu" %% "thrift-serializer" % "5.0.2",
-  "software.amazon.kinesis" % "amazon-kinesis-client" % "2.4.3",
+  "software.amazon.kinesis" % "amazon-kinesis-client" % "2.4.8",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.twitter" %% "scrooge-core" % "21.1.0")
+
+val jacksonVersion = "2.12.7"
+dependencyOverrides ++= Seq(
+  "com.charleskorn.kaml" % "kaml" % "0.53.0",
+  "com.fasterxml.jackson.core" % "jackson-databind" % "2.12.7.1",
+  "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
+  "software.amazon.awssdk" % "netty-nio-client" % "2.20.26",
+)
