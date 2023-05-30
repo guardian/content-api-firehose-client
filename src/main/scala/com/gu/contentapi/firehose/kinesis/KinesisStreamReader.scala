@@ -24,12 +24,20 @@ trait KinesisStreamReader {
   private val workerId = UUID.randomUUID().toString
 
   private val kinesisClient = KinesisClientUtil.createKinesisAsyncClient(
-    KinesisAsyncClient.builder()
+    kinesisStreamReaderConfig.KinesisClientBuilder()
       .credentialsProvider(credentialsProvider)
       .region(Region.of(kinesisStreamReaderConfig.awsRegion)))
 
-  private val dynamoClient = DynamoDbAsyncClient.builder().credentialsProvider(credentialsProvider).region(Region.of(kinesisStreamReaderConfig.awsRegion)).build()
-  private val cwClient = CloudWatchAsyncClient.builder().credentialsProvider(credentialsProvider).region(Region.of(kinesisStreamReaderConfig.awsRegion)).build()
+  private val dynamoClient = kinesisStreamReaderConfig.DynamoClientBuilder()
+    .credentialsProvider(credentialsProvider)
+    .region(Region.of(kinesisStreamReaderConfig.awsRegion))
+    .build()
+
+  private val cwClient = kinesisStreamReaderConfig.CloudWatchClientBuilder()
+    .credentialsProvider(credentialsProvider)
+    .region(Region.of(kinesisStreamReaderConfig.awsRegion))
+    .build()
+
   private val configsBuilder = new ConfigsBuilder(
     kinesisStreamReaderConfig.streamName,
     kinesisStreamReaderConfig.applicationName,
