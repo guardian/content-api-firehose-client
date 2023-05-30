@@ -28,7 +28,7 @@ jobs:
       - name: Run tests
         env:
           SBT_JUNIT_OUTPUT: ./junit-tests
-        run: sbt test
+        run: sbt +test
         
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
