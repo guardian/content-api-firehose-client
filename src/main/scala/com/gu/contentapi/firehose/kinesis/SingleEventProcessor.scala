@@ -30,6 +30,7 @@ abstract class EventProcessor[EventT <: ThriftStruct: ThriftStructCodec]
   override def initialize(input: InitializationInput): Unit = {
     this.shardId = input.shardId()
     logger.info(s"Initialized an event processor for shard $shardId")
+    listenerStarted()
   }
 
   override def processRecords(input: ProcessRecordsInput): Unit = {
@@ -37,7 +38,9 @@ abstract class EventProcessor[EventT <: ThriftStruct: ThriftStructCodec]
       val buffer = record.data()
       val op = ThriftDeserializer.deserialize(buffer)
       op match {
-        case Success(event) => Some(event)
+        case Success(event) =>
+          logger.info("Received event from the stream: ", event)
+          Some(event)
         case Failure(e) => {
           logger.error(s"deserialization of event buffer failed: ${e.getMessage}", e)
           buffer.rewind()
@@ -60,6 +63,8 @@ abstract class EventProcessor[EventT <: ThriftStruct: ThriftStructCodec]
   }
 
   protected def processEvents(events: Seq[EventT]): Unit
+
+  protected def listenerStarted(): Unit = {}
 
   /* Checkpoint after every X seconds or every Y records */
   private def shouldCheckpointNow =

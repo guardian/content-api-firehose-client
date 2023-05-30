@@ -67,7 +67,8 @@ libraryDependencies ++= Seq(
   "software.amazon.kinesis" % "amazon-kinesis-client" % "2.4.8",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.twitter" %% "scrooge-core" % "21.1.0",
-  "org.specs2" %% "specs2-core" % "4.20.0" % "test"
+  "org.specs2" %% "specs2-core" % "4.20.0" % "test",
+  "ch.qos.logback" % "logback-classic" % "1.4.7" % "test",
 )
 
 val jacksonVersion = "2.12.7"

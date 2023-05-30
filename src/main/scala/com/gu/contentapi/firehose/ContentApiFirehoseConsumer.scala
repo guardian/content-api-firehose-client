@@ -49,6 +49,7 @@ class ContentApiEventProcessor(filterProductionMonitoring: Boolean, override val
     }
   }
 
+  override protected def listenerStarted(): Unit = streamListener.listenerStarted()
   override def shutdown(shutdownReason: ShutdownReason): Unit = {
     logger.info(s"EventProcessor is shutting down: shutdown state is $shutdownReason")
   }

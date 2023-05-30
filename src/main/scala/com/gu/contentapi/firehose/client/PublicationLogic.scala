@@ -49,4 +49,8 @@ trait StreamListener {
 
   def atomUpdate(atom: Atom): Unit
 
+  /**
+   * Called when the listener starts up. Only used in tests.
+   */
+  def listenerStarted(): Unit = {}
 }
