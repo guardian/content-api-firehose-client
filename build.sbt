@@ -9,6 +9,9 @@ Compile / doc / scalacOptions  := Nil
 
 releaseCrossBuild := true
 
+enablePlugins(plugins.JUnitXmlReportPlugin)
+Test / testOptions ++= Seq( Tests.Argument("-u", sys.env.getOrElse("SBT_JUNIT_OUTPUT","/tmp")) )
+
 pomExtra := (
 <url>https://github.com/guardian/content-api-firehose-client</url>
   <developers>
