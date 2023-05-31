@@ -51,11 +51,11 @@ lazy val releaseProcessSteps: Seq[ReleaseStep] = {
     checkSnapshotDependencies,
     inquireVersions,
     runClean,
-    runTest
+    runTest,
+    setReleaseVersion,
   )
 
   val localExtraSteps:Seq[ReleaseStep] = Seq(
-    setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
     publishArtifacts,
