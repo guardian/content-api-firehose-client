@@ -44,32 +44,48 @@ ThisBuild / pomIncludeRepository := { _ => false }
 releaseCrossBuild := true
 releasePublishArtifactsAction := PgpKeys.publishSigned.value
 
-if (sys.env.contains("CI")) {
-  //if we are running in CI we already have a tag pushed for us
-  releaseProcess := Seq(
-    checkSnapshotDependencies,
-    runClean,
-    runTest,
-    publishArtifacts,
-    releaseStepCommand("sonatypeReleaseAll"),
-  )
-} else {
-  //if we are not running in CI then do the full release process
-  releaseProcess := Seq(
+val snapshotReleaseType = "snapshot"
+
+lazy val releaseProcessSteps: Seq[ReleaseStep] = {
+  val commonSteps:Seq[ReleaseStep] = Seq(
     checkSnapshotDependencies,
     inquireVersions,
     runClean,
-    runTest,
+    runTest
+  )
+
+  val localExtraSteps:Seq[ReleaseStep] = Seq(
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
     publishArtifacts,
     setNextVersion,
-    commitNextVersion,
-    releaseStepCommand("sonatypeReleaseAll"),
-    pushChanges
+    commitNextVersion
   )
+
+  val snapshotSteps:Seq[ReleaseStep] = Seq(
+    publishArtifacts,
+    releaseStepCommand("sonatypeReleaseAll")
+  )
+
+  val prodSteps:Seq[ReleaseStep] = Seq(
+    releaseStepCommandAndRemaining("+publishSigned"),
+    releaseStepCommand("sonatypeBundleRelease")
+  )
+
+  val localPostRelease:Seq[ReleaseStep]  = Seq(
+    pushChanges,
+  )
+
+  (sys.props.get("RELEASE_TYPE"), sys.env.get("CI")) match {
+    case (Some(v), None) if v == snapshotReleaseType => commonSteps ++ localExtraSteps ++ snapshotSteps ++ localPostRelease
+    case (_, None) => commonSteps ++ localExtraSteps ++ prodSteps ++ localPostRelease
+    case (Some(v), _) if v == snapshotReleaseType => commonSteps ++ snapshotSteps
+    case (_, _)=> commonSteps ++ prodSteps
+  }
 }
+
+releaseProcess := releaseProcessSteps
 
 resolvers += "Guardian GitHub Repository" at "https://guardian.github.io/maven/repo-releases"
 resolvers ++= Resolver.sonatypeOssRepos("snapshots")
