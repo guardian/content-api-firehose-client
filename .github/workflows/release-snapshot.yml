@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          base: main  #see https://github.com/peter-evans/create-pull-request/blob/main/docs/concepts-guidelines.md#pull-request-events
       - uses: actions/setup-java@v3
         with:
           distribution: corretto
