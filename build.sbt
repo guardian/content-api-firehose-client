@@ -31,13 +31,6 @@ scmInfo := Some(ScmInfo(
   "scm:git:git@github.com:guardian/content-api-firehose-client.git"
 ))
 
-publishTo := Some(
-  if (isSnapshot.value)
-    Opts.resolver.sonatypeOssSnapshots.head
-  else
-    Opts.resolver.sonatypeStaging
-)
-
 ThisBuild / publishMavenStyle := true
 ThisBuild / pomIncludeRepository := { _ => false }
 
