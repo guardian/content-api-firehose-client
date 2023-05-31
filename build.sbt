@@ -31,6 +31,9 @@ scmInfo := Some(ScmInfo(
   "scm:git:git@github.com:guardian/content-api-firehose-client.git"
 ))
 
+//https://github.com/xerial/sbt-sonatype/issues/103
+publishTo := sonatypePublishToBundle.value
+
 ThisBuild / publishMavenStyle := true
 ThisBuild / pomIncludeRepository := { _ => false }
 
