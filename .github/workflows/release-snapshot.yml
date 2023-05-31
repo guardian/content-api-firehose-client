@@ -1,4 +1,4 @@
-name: Release Snapshot to Sonatype
+name: Release Sonatype
 
 on:
   release:
@@ -31,6 +31,38 @@ jobs:
           export GPG_TTY=$(tty)
           echo "Releasing version $VERSION Sonatype as snapshot"
           yes | sbt -DRELEASE_TYPE=snapshot "clean" "release cross release-version $VERSION with-defaults"
+        env:
+          PGP_SECRET: ${{ secrets.PGP_SECRET }}
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+
+  release_production_sonatype:
+    if: "! github.event.release.prerelease"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          base: main  #see https://github.com/peter-evans/create-pull-request/blob/main/docs/concepts-guidelines.md#pull-request-events
+      - uses: actions/setup-java@v3
+        with:
+          distribution: corretto
+          java-version: 11
+          cache: sbt
+      - name: Release Snapshot to Sonatype
+        run: |
+          VERSION=$(git describe --tags | cut -f2 -d"@")
+          if [[ ${VERSION:0:1} == "v" ]] ; then
+            VERSION=${VERSION:1}
+          fi
+          if [[ ${VERSION: -9} == "-SNAPSHOT" ]] ; then
+            echo "Version must NOT end in -SNAPSHOT."
+            exit 1
+          fi
+          echo $PGP_SECRET | base64 --decode | gpg --batch --import
+          export GPG_TTY=$(tty)
+          echo "Releasing version $VERSION Sonatype as snapshot"
+          yes | sbt -DRELEASE_TYPE=production "clean" "release cross release-version $VERSION with-defaults"
         env:
           PGP_SECRET: ${{ secrets.PGP_SECRET }}
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
