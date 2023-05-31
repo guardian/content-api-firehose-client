@@ -43,20 +43,33 @@ ThisBuild / pomIncludeRepository := { _ => false }
 
 releaseCrossBuild := true
 releasePublishArtifactsAction := PgpKeys.publishSigned.value
-releaseProcess := Seq(
-  checkSnapshotDependencies,
-  inquireVersions,
-  runClean,
-  runTest,
-  setReleaseVersion,
-  commitReleaseVersion,
-  tagRelease,
-  publishArtifacts,
-  setNextVersion,
-  commitNextVersion,
-  releaseStepCommand("sonatypeReleaseAll"),
-  pushChanges
-)
+
+if (sys.env.contains("CI")) {
+  //if we are running in CI we already have a tag pushed for us
+  releaseProcess := Seq(
+    checkSnapshotDependencies,
+    runClean,
+    runTest,
+    publishArtifacts,
+    releaseStepCommand("sonatypeReleaseAll"),
+  )
+} else {
+  //if we are not running in CI then do the full release process
+  releaseProcess := Seq(
+    checkSnapshotDependencies,
+    inquireVersions,
+    runClean,
+    runTest,
+    setReleaseVersion,
+    commitReleaseVersion,
+    tagRelease,
+    publishArtifacts,
+    setNextVersion,
+    commitNextVersion,
+    releaseStepCommand("sonatypeReleaseAll"),
+    pushChanges
+  )
+}
 
 resolvers += "Guardian GitHub Repository" at "https://guardian.github.io/maven/repo-releases"
 resolvers ++= Resolver.sonatypeOssRepos("snapshots")
