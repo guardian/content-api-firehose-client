@@ -9,6 +9,9 @@ Compile / doc / scalacOptions  := Nil
 
 releaseCrossBuild := true
 
+enablePlugins(plugins.JUnitXmlReportPlugin)
+Test / testOptions ++= Seq( Tests.Argument("-u", sys.env.getOrElse("SBT_JUNIT_OUTPUT","/tmp")) )
+
 pomExtra := (
 <url>https://github.com/guardian/content-api-firehose-client</url>
   <developers>
@@ -28,32 +31,57 @@ scmInfo := Some(ScmInfo(
   "scm:git:git@github.com:guardian/content-api-firehose-client.git"
 ))
 
-publishTo := Some(
-  if (isSnapshot.value)
-    Opts.resolver.sonatypeOssSnapshots.head
-  else
-    Opts.resolver.sonatypeStaging
-)
+//https://github.com/xerial/sbt-sonatype/issues/103
+publishTo := sonatypePublishToBundle.value
 
 ThisBuild / publishMavenStyle := true
 ThisBuild / pomIncludeRepository := { _ => false }
 
 releaseCrossBuild := true
 releasePublishArtifactsAction := PgpKeys.publishSigned.value
-releaseProcess := Seq(
-  checkSnapshotDependencies,
-  inquireVersions,
-  runClean,
-  runTest,
-  setReleaseVersion,
-  commitReleaseVersion,
-  tagRelease,
-  publishArtifacts,
-  setNextVersion,
-  commitNextVersion,
-  releaseStepCommand("sonatypeReleaseAll"),
-  pushChanges
-)
+
+val snapshotReleaseType = "snapshot"
+
+lazy val releaseProcessSteps: Seq[ReleaseStep] = {
+  val commonSteps:Seq[ReleaseStep] = Seq(
+    checkSnapshotDependencies,
+    inquireVersions,
+    runClean,
+    runTest,
+    setReleaseVersion,
+  )
+
+  val localExtraSteps:Seq[ReleaseStep] = Seq(
+    commitReleaseVersion,
+    tagRelease,
+    publishArtifacts,
+    setNextVersion,
+    commitNextVersion
+  )
+
+  val snapshotSteps:Seq[ReleaseStep] = Seq(
+    publishArtifacts,
+    releaseStepCommand("sonatypeReleaseAll")
+  )
+
+  val prodSteps:Seq[ReleaseStep] = Seq(
+    releaseStepCommandAndRemaining("+publishSigned"),
+    releaseStepCommand("sonatypeBundleRelease")
+  )
+
+  val localPostRelease:Seq[ReleaseStep]  = Seq(
+    pushChanges,
+  )
+
+  (sys.props.get("RELEASE_TYPE"), sys.env.get("CI")) match {
+    case (Some(v), None) if v == snapshotReleaseType => commonSteps ++ localExtraSteps ++ snapshotSteps ++ localPostRelease
+    case (_, None) => commonSteps ++ localExtraSteps ++ prodSteps ++ localPostRelease
+    case (Some(v), _) if v == snapshotReleaseType => commonSteps ++ snapshotSteps
+    case (_, _)=> commonSteps ++ prodSteps
+  }
+}
+
+releaseProcess := releaseProcessSteps
 
 resolvers += "Guardian GitHub Repository" at "https://guardian.github.io/maven/repo-releases"
 resolvers ++= Resolver.sonatypeOssRepos("snapshots")

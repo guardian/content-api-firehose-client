@@ -147,3 +147,21 @@ And when you're finished:
 ```
 contentApiFirehoseConsumer.shutdown()
 ```
+
+#### Non-production releases:
+
+The easiest way to release a snapshot version is via the github UI. 
+[This](https://github.com/guardian/content-api-firehose-client/pull/28/373) PR introduced the ability to use a github action to trigger the release.
+
+The steps you should take are:
+- Push the branch with the changes you want to release to Github.
+- [Click here](https://github.com/guardian/content-api-firehose-client/releases/new?prerelease=true) to create prerelease using Github releases.
+
+- You must then:
+- Set the Target to your branch.
+- Create a tag for the snapshot release (the tag can be created from this same UI if it doesn't already exist).
+- The tag should ideally have format "vX.X.X-SNAPSHOT".
+- Double-check that the "Set as pre-release" box is ticket.
+- To automatically release the snapshot to sonatype then click the "Publish release" button.
+
+
