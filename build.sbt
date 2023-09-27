@@ -102,5 +102,5 @@ dependencyOverrides ++= Seq(
   "software.amazon.awssdk" % "netty-nio-client" % "2.20.26",
   "org.json" % "json" % "20230227",
   "io.netty" % "netty-handler" % "4.1.93.Final",
-  "org.xerial.snappy" % "snappy-java" % "1.1.10.1"
+  "org.xerial.snappy" % "snappy-java" % "1.1.10.4"
 )
