@@ -89,7 +89,7 @@ resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 libraryDependencies ++= Seq(
   "com.gu" %% "content-api-models-scala" % "17.5.1",
   "com.gu" %% "thrift-serializer" % "5.0.2",
-  "software.amazon.kinesis" % "amazon-kinesis-client" % "2.5.0",
+  "software.amazon.kinesis" % "amazon-kinesis-client" % "2.5.2",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.twitter" %% "scrooge-core" % "21.1.0")
 
@@ -101,6 +101,7 @@ dependencyOverrides ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
   "software.amazon.awssdk" % "netty-nio-client" % "2.20.26",
   "org.json" % "json" % "20230227",
-  "io.netty" % "netty-handler" % "4.1.93.Final",
+  "io.netty" % "netty-handler" % "4.1.94.Final",
+  "io.netty" % "netty-codec-http2" % "4.1.94.Final",
   "org.xerial.snappy" % "snappy-java" % "1.1.10.4"
 )
