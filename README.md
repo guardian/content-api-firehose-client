@@ -164,4 +164,28 @@ The steps you should take are:
 - Double-check that the "Set as pre-release" box is ticket.
 - To automatically release the snapshot to sonatype then click the "Publish release" button.
 
+#### Production releases:
+
+When your changes are done and tested and you're ready to release a new production version, edit the `version.sbt` file to reflect the version you are about to release. 
+
+Typically this should just require the removal of the -SNAPSHOT part, but check in [maven](https://repo1.maven.org/maven2/com/gu/content-api-firehose-client_2.13/) to make sure nobody else has released this version before you.
+
+Open a PR.
+
+When your PR is approved, merge it to `main` and ensure the build actions complete successfully.
+
+Then, on the [releases](https://github.com/guardian/content-api-firehose-client/releases) page: 
+- Choose `Draft a new release`
+- Create a new tag of the version number e.g. `v1.0.10`
+- Set the target to the `main` branch
+- Add a release title (the version number again is fine)
+- Add an optional description
+- Ensure that `Set as pre-release` is **unchecked**
+- Click the `Publish release` button
+
+When the release process has finished, pull the updated `main` branch locally and update the `version.sbt` file to reflect the next build number, e.g. `1.0.11-SNAPSHOT` and commit that directly back to `main` - there's no need to open a PR for that.
+
+When your release shows up on [maven](https://repo1.maven.org/maven2/com/gu/content-api-firehose-client_2.13/) the updated version can be referenced in client code.
+
+
 
