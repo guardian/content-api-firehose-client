@@ -17,7 +17,7 @@ jobs:
           distribution: corretto
           java-version: 11
           cache: sbt
-      - name: Release Snapshot to Sonatype
+      - name: Release Snapshot (prerelease) to Sonatype
         run: |
           VERSION=$(git describe --tags | cut -f2 -d"@")
           if [[ ${VERSION:0:1} == "v" ]] ; then
