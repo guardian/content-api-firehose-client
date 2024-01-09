@@ -1,7 +1,7 @@
 Content API Firehose Client
 ============================
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gu/content-api-firehose-client_2.13/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gu/content-api-firehose-client_2.13) 
+[![content-api-firehose-client Scala version support](https://index.scala-lang.org/guardian/content-api-firehose-client/content-api-firehose-client/latest-by-scala-version.svg?platform=jvm)](https://index.scala-lang.org/guardian/content-api-firehose-client/content-api-firehose-client)
 
 A client for the Guardian's [Content API](http://explorer.capi.gutools.co.uk/) firehose - an events stream for all updates and deletes of Guardian content.
 
