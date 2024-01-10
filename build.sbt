@@ -1,10 +1,11 @@
 import sbtrelease.ReleaseStateTransformations._
+import sbtversionpolicy.withsbtrelease.ReleaseVersion
 
 name:= "content-api-firehose-client"
 organization := "com.gu"
-scalaVersion := "2.12.17"
-crossScalaVersions := Seq(scalaVersion.value, "2.13.10")
-scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-Xfatal-warnings")
+scalaVersion := "2.12.18"
+crossScalaVersions := Seq(scalaVersion.value, "2.13.12")
+scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-Xfatal-warnings", "-release:11")
 Compile / doc / scalacOptions  := Nil
 
 releaseCrossBuild := true
@@ -12,79 +13,27 @@ releaseCrossBuild := true
 enablePlugins(plugins.JUnitXmlReportPlugin)
 Test / testOptions ++= Seq( Tests.Argument("-u", sys.env.getOrElse("SBT_JUNIT_OUTPUT","/tmp")) )
 
-pomExtra := (
-<url>https://github.com/guardian/content-api-firehose-client</url>
-  <developers>
-    <developer>
-      <id>LATaylor-guardian</id>
-      <name>Luke Taylor</name>
-      <url>https://github.com/LATaylor-guardian</url>
-    </developer>
-  </developers>
-)
-Test / publishArtifact  := false
-releasePublishArtifactsAction := PgpKeys.publishSigned.value
 organization := "com.gu"
-licenses := Seq("Apache v2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html"))
-scmInfo := Some(ScmInfo(
-  url("https://github.com/guardian/content-api-firehose-client"),
-  "scm:git:git@github.com:guardian/content-api-firehose-client.git"
-))
-
-//https://github.com/xerial/sbt-sonatype/issues/103
-publishTo := sonatypePublishToBundle.value
-
-ThisBuild / publishMavenStyle := true
-ThisBuild / pomIncludeRepository := { _ => false }
+licenses := Seq(License.Apache2)
 
 releaseCrossBuild := true
-releasePublishArtifactsAction := PgpKeys.publishSigned.value
 
-val snapshotReleaseType = "snapshot"
+releaseVersion := ReleaseVersion.fromAggregatedAssessedCompatibilityWithLatestRelease().value
 
-lazy val releaseProcessSteps: Seq[ReleaseStep] = {
-  val commonSteps:Seq[ReleaseStep] = Seq(
-    checkSnapshotDependencies,
-    inquireVersions,
-    runClean,
-    runTest,
-    setReleaseVersion,
-  )
-
-  val localExtraSteps:Seq[ReleaseStep] = Seq(
-    commitReleaseVersion,
-    tagRelease,
-    publishArtifacts,
-    setNextVersion,
-    commitNextVersion
-  )
-
-  val snapshotSteps:Seq[ReleaseStep] = Seq(
-    publishArtifacts,
-    releaseStepCommand("sonatypeReleaseAll")
-  )
-
-  val prodSteps:Seq[ReleaseStep] = Seq(
-    releaseStepCommandAndRemaining("+publishSigned"),
-    releaseStepCommand("sonatypeBundleRelease")
-  )
-
-  val localPostRelease:Seq[ReleaseStep]  = Seq(
-    pushChanges,
-  )
-
-  (sys.props.get("RELEASE_TYPE"), sys.env.get("CI")) match {
-    case (Some(v), None) if v == snapshotReleaseType => commonSteps ++ localExtraSteps ++ snapshotSteps ++ localPostRelease
-    case (_, None) => commonSteps ++ localExtraSteps ++ prodSteps ++ localPostRelease
-    case (Some(v), _) if v == snapshotReleaseType => commonSteps ++ snapshotSteps
-    case (_, _)=> commonSteps ++ prodSteps
-  }
-}
-
-releaseProcess := releaseProcessSteps
+releaseProcess := Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  runClean,
+  runTest,
+  setReleaseVersion,
+  commitReleaseVersion,
+  tagRelease,
+  setNextVersion,
+  commitNextVersion
+)
 
 resolvers += "Guardian GitHub Repository" at "https://guardian.github.io/maven/repo-releases"
-resolvers ++= Resolver.sonatypeOssRepos("snapshots")
+resolvers ++= Resolver.sonatypeOssRepos("releases")
 
 libraryDependencies ++= Seq(
   "com.gu" %% "content-api-models-scala" % "17.5.1",
