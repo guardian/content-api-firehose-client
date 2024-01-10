@@ -2,6 +2,7 @@ Content API Firehose Client
 ============================
 
 [![content-api-firehose-client Scala version support](https://index.scala-lang.org/guardian/content-api-firehose-client/content-api-firehose-client/latest-by-scala-version.svg?platform=jvm)](https://index.scala-lang.org/guardian/content-api-firehose-client/content-api-firehose-client)
+[![Release](https://github.com/guardian/content-api-firehose-client/actions/workflows/release.yml/badge.svg)](https://github.com/guardian/content-api-firehose-client/actions/workflows/release.yml)
 
 A client for the Guardian's [Content API](http://explorer.capi.gutools.co.uk/) firehose - an events stream for all updates and deletes of Guardian content.
 
@@ -147,45 +148,8 @@ And when you're finished:
 ```
 contentApiFirehoseConsumer.shutdown()
 ```
+## How to release a new version
 
-#### Non-production releases:
-
-The easiest way to release a snapshot version is via the github UI. 
-[This](https://github.com/guardian/content-api-firehose-client/pull/28/373) PR introduced the ability to use a github action to trigger the release.
-
-The steps you should take are:
-- Push the branch with the changes you want to release to Github.
-- [Click here](https://github.com/guardian/content-api-firehose-client/releases/new?prerelease=true) to create prerelease using Github releases.
-
-- You must then:
-- Set the Target to your branch.
-- Create a tag for the snapshot release (the tag can be created from this same UI if it doesn't already exist).
-- The tag should ideally have format "vX.X.X-SNAPSHOT".
-- Double-check that the "Set as pre-release" box is ticket.
-- To automatically release the snapshot to sonatype then click the "Publish release" button.
-
-#### Production releases:
-
-When your changes are done and tested and you're ready to release a new production version, edit the `version.sbt` file to reflect the version you are about to release. 
-
-Typically this should just require the removal of the -SNAPSHOT part, but check in [maven](https://repo1.maven.org/maven2/com/gu/content-api-firehose-client_2.13/) to make sure nobody else has released this version before you.
-
-Open a PR.
-
-When your PR is approved, merge it to `main` and ensure the build actions complete successfully.
-
-Then, on the [releases](https://github.com/guardian/content-api-firehose-client/releases) page: 
-- Choose `Draft a new release`
-- Create a new tag of the version number e.g. `v1.0.10`
-- Set the target to the `main` branch
-- Add a release title (the version number again is fine)
-- Add an optional description
-- Ensure that `Set as pre-release` is **unchecked**
-- Click the `Publish release` button
-
-When the release process has finished, pull the updated `main` branch locally and update the `version.sbt` file to reflect the next build number, e.g. `1.0.11-SNAPSHOT` and commit that directly back to `main` - there's no need to open a PR for that.
-
-When your release shows up on [maven](https://repo1.maven.org/maven2/com/gu/content-api-firehose-client_2.13/) the updated version can be referenced in client code.
-
-
-
+This repo uses [`gha-scala-library-release-workflow`](https://github.com/guardian/gha-scala-library-release-workflow)
+to automate publishing releases - see
+[**Making a Release**](https://github.com/guardian/gha-scala-library-release-workflow/blob/main/docs/making-a-release.md).
