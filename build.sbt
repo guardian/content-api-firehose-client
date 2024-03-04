@@ -53,5 +53,6 @@ dependencyOverrides ++= Seq(
   "io.netty" % "netty-handler" % "4.1.94.Final",      // SNYK-JAVA-IONETTY-5725787
   "io.netty" % "netty-codec-http2" % "4.1.100.Final", // SNYK-JAVA-IONETTY-5953332
   "org.xerial.snappy" % "snappy-java" % "1.1.10.4",
-  "org.apache.commons" % "commons-compress" % "1.26.0"
+  "org.apache.commons" % "commons-compress" % "1.26.0",
+  "com.amazon.ion" % "ion-java" % "1.10.5"
 )
