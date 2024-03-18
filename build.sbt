@@ -4,7 +4,7 @@ import sbtversionpolicy.withsbtrelease.ReleaseVersion
 name:= "content-api-firehose-client"
 organization := "com.gu"
 scalaVersion := "2.12.19"
-crossScalaVersions := Seq(scalaVersion.value, "2.13.12")
+crossScalaVersions := Seq(scalaVersion.value, "2.13.13")
 scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-Xfatal-warnings", "-release:11")
 Compile / doc / scalacOptions  := Nil
 
