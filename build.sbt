@@ -40,7 +40,7 @@ libraryDependencies ++= Seq(
   "com.gu" %% "thrift-serializer" % "5.0.5",
   "software.amazon.kinesis" % "amazon-kinesis-client" % "2.5.6",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
-  "com.twitter" %% "scrooge-core" % "21.12.0")
+  "com.twitter" %% "scrooge-core" % "23.11.0")
 
 val jacksonVersion = "2.12.7"
 dependencyOverrides ++= Seq(
