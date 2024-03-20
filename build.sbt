@@ -3,8 +3,8 @@ import sbtversionpolicy.withsbtrelease.ReleaseVersion
 
 name:= "content-api-firehose-client"
 organization := "com.gu"
-scalaVersion := "2.12.18"
-crossScalaVersions := Seq(scalaVersion.value, "2.13.12")
+scalaVersion := "2.12.19"
+crossScalaVersions := Seq(scalaVersion.value, "2.13.13")
 scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-Xfatal-warnings", "-release:11")
 Compile / doc / scalacOptions  := Nil
 
@@ -37,10 +37,10 @@ resolvers ++= Resolver.sonatypeOssRepos("releases")
 
 libraryDependencies ++= Seq(
   "com.gu" %% "content-api-models-scala" % "22.0.0",
-  "com.gu" %% "thrift-serializer" % "5.0.2",
-  "software.amazon.kinesis" % "amazon-kinesis-client" % "2.5.2",
+  "com.gu" %% "thrift-serializer" % "5.0.5",
+  "software.amazon.kinesis" % "amazon-kinesis-client" % "2.5.6",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
-  "com.twitter" %% "scrooge-core" % "21.1.0")
+  "com.twitter" %% "scrooge-core" % "21.12.0")
 
 val jacksonVersion = "2.12.7"
 dependencyOverrides ++= Seq(
