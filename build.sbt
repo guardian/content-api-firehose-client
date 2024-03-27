@@ -36,7 +36,7 @@ resolvers += "Guardian GitHub Repository" at "https://guardian.github.io/maven/r
 resolvers ++= Resolver.sonatypeOssRepos("releases")
 
 libraryDependencies ++= Seq(
-  "com.gu" %% "content-api-models-scala" % "22.0.0",
+  "com.gu" %% "content-api-models-scala" % "23.0.0-PREVIEW.dbbump-and-test-content-entity-version.2024-03-27T0934.cbc6ec49", //TODO- to change to prod release
   "com.gu" %% "thrift-serializer" % "5.0.5",
   "software.amazon.kinesis" % "amazon-kinesis-client" % "2.5.6",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
