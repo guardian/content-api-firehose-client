@@ -42,7 +42,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.twitter" %% "scrooge-core" % "21.12.0")
 
-val jacksonVersion = "2.12.7"
+val jacksonVersion = "2.17.2"
 dependencyOverrides ++= Seq(
   "com.charleskorn.kaml" % "kaml" % "0.53.0",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.12.7.1",
