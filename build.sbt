@@ -45,7 +45,7 @@ libraryDependencies ++= Seq(
 val jacksonVersion = "2.17.2"
 dependencyOverrides ++= Seq(
   "com.charleskorn.kaml" % "kaml" % "0.53.0",
-  "com.fasterxml.jackson.core" % "jackson-databind" % "2.12.7.1",
+  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
   "software.amazon.awssdk" % "netty-nio-client" % "2.20.26",
