@@ -38,14 +38,14 @@ resolvers ++= Resolver.sonatypeOssRepos("releases")
 libraryDependencies ++= Seq(
   "com.gu" %% "content-api-models-scala" % "25.0.0",
   "com.gu" %% "thrift-serializer" % "5.0.5",
-  "software.amazon.kinesis" % "amazon-kinesis-client" % "2.5.6",
+  "software.amazon.kinesis" % "amazon-kinesis-client" % "2.6.0",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.twitter" %% "scrooge-core" % "21.12.0")
 
-val jacksonVersion = "2.12.7"
+val jacksonVersion = "2.17.2"
 dependencyOverrides ++= Seq(
   "com.charleskorn.kaml" % "kaml" % "0.53.0",
-  "com.fasterxml.jackson.core" % "jackson-databind" % "2.12.7.1",
+  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
   "software.amazon.awssdk" % "netty-nio-client" % "2.20.26",
