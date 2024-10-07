@@ -48,12 +48,12 @@ dependencyOverrides ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
-  "software.amazon.awssdk" % "netty-nio-client" % "2.20.26",
+  "software.amazon.awssdk" % "netty-nio-client" % "2.26.25",
   "org.json" % "json" % "20231013",
-  "io.netty" % "netty-handler" % "4.1.94.Final",      // SNYK-JAVA-IONETTY-5725787
-  "io.netty" % "netty-codec-http2" % "4.1.100.Final", // SNYK-JAVA-IONETTY-5953332
   "org.xerial.snappy" % "snappy-java" % "1.1.10.4",
   "org.apache.commons" % "commons-compress" % "1.26.0",
   "com.amazon.ion" % "ion-java" % "1.10.5",//overriding until a version of amazon-kinesis-client is available that removes the ion-java vulnerability
-  "software.amazon.glue" % "schema-registry-serde" % "1.1.19" //overriding until a version of amazon-kinesis-client is available that removes the ion-java vulnerability
+  "software.amazon.glue" % "schema-registry-serde" % "1.1.19", //overriding until a version of amazon-kinesis-client is available that removes the ion-java vulnerability
+  "org.apache.avro" % "avro" % "1.11.4", //overriding until a version of amazon-kinesis-client / glue-schema-registry-common is available that removes the avro vuln
+  "com.google.protobuf" % "protobuf-java" % "3.25.5"  //overriding until a version of amazon-kinesis-client is available that removes the protobuf vuln
 )
