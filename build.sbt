@@ -36,8 +36,8 @@ resolvers += "Guardian GitHub Repository" at "https://guardian.github.io/maven/r
 resolvers ++= Resolver.sonatypeOssRepos("releases")
 
 libraryDependencies ++= Seq(
-  "com.gu" %% "content-api-models-scala" % "25.0.0",
-  "com.gu" %% "thrift-serializer" % "5.0.5",
+  "com.gu" %% "content-api-models-scala" % "25.1.1",
+  "com.gu" %% "thrift-serializer" % "5.0.7",
   "software.amazon.kinesis" % "amazon-kinesis-client" % "2.6.0",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.twitter" %% "scrooge-core" % "21.12.0")
