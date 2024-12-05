@@ -57,3 +57,5 @@ dependencyOverrides ++= Seq(
   "org.apache.avro" % "avro" % "1.11.4", //overriding until a version of amazon-kinesis-client / glue-schema-registry-common is available that removes the avro vuln
   "com.google.protobuf" % "protobuf-java" % "3.25.5"  //overriding until a version of amazon-kinesis-client is available that removes the protobuf vuln
 )
+
+libraryDependencySchemes += "software.amazon.awssdk" % "aws-json-protocol" % "pvp"
