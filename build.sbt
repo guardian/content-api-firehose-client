@@ -49,7 +49,7 @@ dependencyOverrides ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
-  "software.amazon.awssdk" % "netty-nio-client" % "2.26.25",
+  "software.amazon.awssdk" % "netty-nio-client" % "2.26.31",
   "org.json" % "json" % "20231013",
   "org.xerial.snappy" % "snappy-java" % "1.1.10.4",
   "org.apache.commons" % "commons-compress" % "1.26.0",
