@@ -43,7 +43,7 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.2.19" % Test
 )
 
-val jacksonVersion = "2.17.2"
+val jacksonVersion = "2.17.3"
 dependencyOverrides ++= Seq(
   "com.charleskorn.kaml" % "kaml" % "0.66.0",
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
