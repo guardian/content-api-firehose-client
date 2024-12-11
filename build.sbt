@@ -3,15 +3,16 @@ import sbtversionpolicy.withsbtrelease.ReleaseVersion
 
 name:= "content-api-firehose-client"
 organization := "com.gu"
-scalaVersion := "2.12.19"
-crossScalaVersions := Seq(scalaVersion.value, "2.13.13")
+scalaVersion := "2.12.20"
+crossScalaVersions := Seq(scalaVersion.value, "2.13.15")
 scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-Xfatal-warnings", "-release:11")
 Compile / doc / scalacOptions  := Nil
 
 releaseCrossBuild := true
 
 enablePlugins(plugins.JUnitXmlReportPlugin)
-Test / testOptions ++= Seq( Tests.Argument("-u", sys.env.getOrElse("SBT_JUNIT_OUTPUT","/tmp")) )
+Test / testOptions +=
+  Tests.Argument(TestFrameworks.ScalaTest, "-u", s"test-results/scala-${scalaVersion.value}", "-o")
 
 organization := "com.gu"
 licenses := Seq(License.Apache2)
@@ -24,7 +25,6 @@ releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
   inquireVersions,
   runClean,
-  runTest,
   setReleaseVersion,
   commitReleaseVersion,
   tagRelease,
@@ -32,7 +32,6 @@ releaseProcess := Seq[ReleaseStep](
   commitNextVersion
 )
 
-resolvers += "Guardian GitHub Repository" at "https://guardian.github.io/maven/repo-releases"
 resolvers ++= Resolver.sonatypeOssRepos("releases")
 
 libraryDependencies ++= Seq(
@@ -40,7 +39,9 @@ libraryDependencies ++= Seq(
   "com.gu" %% "thrift-serializer" % "5.0.5",
   "software.amazon.kinesis" % "amazon-kinesis-client" % "2.6.0",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
-  "com.twitter" %% "scrooge-core" % "21.12.0")
+  "com.twitter" %% "scrooge-core" % "21.12.0",
+  "org.scalatest" %% "scalatest" % "3.2.19" % Test
+)
 
 val jacksonVersion = "2.17.2"
 dependencyOverrides ++= Seq(
