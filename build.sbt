@@ -37,7 +37,7 @@ resolvers ++= Resolver.sonatypeOssRepos("releases")
 libraryDependencies ++= Seq(
   "com.gu" %% "content-api-models-scala" % "25.0.0",
   "com.gu" %% "thrift-serializer" % "5.0.5",
-  "software.amazon.kinesis" % "amazon-kinesis-client" % "2.6.0",
+  "software.amazon.kinesis" % "amazon-kinesis-client" % "3.0.1",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.twitter" %% "scrooge-core" % "24.2.0",
   "org.scalatest" %% "scalatest" % "3.2.19" % Test
