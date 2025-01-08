@@ -43,7 +43,7 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.2.19" % Test
 ) ++ Seq("aws-json-protocol", "kinesis").map(artifact => "software.amazon.awssdk" % artifact % "2.29.23")
 
-val jacksonVersion = "2.17.2"
+val jacksonVersion = "2.17.3"
 dependencyOverrides ++= Seq(
   "com.charleskorn.kaml" % "kaml" % "0.67.0",
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
