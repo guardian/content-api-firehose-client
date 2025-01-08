@@ -49,7 +49,7 @@ dependencyOverrides ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
-  "org.json" % "json" % "20231013",
+  "org.json" % "json" % "20250107",
   "org.xerial.snappy" % "snappy-java" % "1.1.10.4",
   "org.apache.commons" % "commons-compress" % "1.26.2",
   "software.amazon.glue" % "schema-registry-serde" % "1.1.19", //overriding until a version of amazon-kinesis-client is available that removes the ion-java vulnerability
