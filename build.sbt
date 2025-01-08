@@ -51,7 +51,7 @@ dependencyOverrides ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
   "org.json" % "json" % "20231013",
   "org.xerial.snappy" % "snappy-java" % "1.1.10.4",
-  "org.apache.commons" % "commons-compress" % "1.26.0",
+  "org.apache.commons" % "commons-compress" % "1.26.2",
   "software.amazon.glue" % "schema-registry-serde" % "1.1.19", //overriding until a version of amazon-kinesis-client is available that removes the ion-java vulnerability
   "org.apache.avro" % "avro" % "1.12.0", //overriding until a version of amazon-kinesis-client / glue-schema-registry-common is available that removes the avro vuln
   "com.google.protobuf" % "protobuf-java" % "4.29.2"  //overriding until a version of amazon-kinesis-client is available that removes the protobuf vuln
