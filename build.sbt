@@ -41,7 +41,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.twitter" %% "scrooge-core" % "21.12.0",
   "org.scalatest" %% "scalatest" % "3.2.19" % Test
-) ++ Seq("aws-json-protocol", "kinesis").map(artifact => "software.amazon.awssdk" % artifact % "2.29.47")
+) ++ Seq("aws-json-protocol", "kinesis").map(artifact => "software.amazon.awssdk" % artifact % "2.29.52")
 
 val jacksonVersion = "2.17.2"
 dependencyOverrides ++= Seq(
