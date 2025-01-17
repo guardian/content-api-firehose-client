@@ -1,14 +1,15 @@
 package com.gu.contentapi.firehose.kinesis
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder
-import com.gu.contentapi.firehose.kinesis.KinesisStreamReader.{ checkApiAccess, kinesisClientFor }
+import com.gu.contentapi.firehose.kinesis.KinesisStreamReader.{checkApiAccess, kinesisClientFor}
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.cloudwatch.CloudWatchAsyncClient
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
 import software.amazon.kinesis.common.KinesisClientUtil.createKinesisAsyncClient
-import software.amazon.kinesis.common.{ ConfigsBuilder, InitialPositionInStream, KinesisRequestsBuilder }
+import software.amazon.kinesis.common.{ConfigsBuilder, InitialPositionInStream, KinesisRequestsBuilder}
+import software.amazon.kinesis.coordinator.CoordinatorConfig.ClientVersionConfig.CLIENT_VERSION_CONFIG_COMPATIBLE_WITH_2X
 import software.amazon.kinesis.coordinator.Scheduler
 import software.amazon.kinesis.processor.ShardRecordProcessorFactory
 
@@ -57,7 +58,7 @@ trait KinesisStreamReader {
 
   lazy val scheduler: Scheduler = new Scheduler(
     configsBuilder.checkpointConfig(),
-    configsBuilder.coordinatorConfig(),
+    configsBuilder.coordinatorConfig().clientVersionConfig(CLIENT_VERSION_CONFIG_COMPATIBLE_WITH_2X),
     configsBuilder.leaseManagementConfig(),
     configsBuilder.lifecycleConfig(),
     configsBuilder.metricsConfig(),
