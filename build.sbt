@@ -8,8 +8,6 @@ crossScalaVersions := Seq(scalaVersion.value, "2.13.15")
 scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-Xfatal-warnings", "-release:11")
 Compile / doc / scalacOptions  := Nil
 
-releaseCrossBuild := true
-
 enablePlugins(plugins.JUnitXmlReportPlugin)
 Test / testOptions +=
   Tests.Argument(TestFrameworks.ScalaTest, "-u", s"test-results/scala-${scalaVersion.value}", "-o")
@@ -17,10 +15,8 @@ Test / testOptions +=
 organization := "com.gu"
 licenses := Seq(License.Apache2)
 
-releaseCrossBuild := true
-
 releaseVersion := ReleaseVersion.fromAggregatedAssessedCompatibilityWithLatestRelease().value
-
+releaseCrossBuild := true
 releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
   inquireVersions,
