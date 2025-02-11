@@ -1,14 +1,16 @@
 package com.gu.contentapi.firehose
 
 import com.gu.contentapi.firehose.client.StreamListener
-import com.gu.contentapi.firehose.kinesis.{ KinesisStreamReader, KinesisStreamReaderConfig, SingleEventProcessor }
-import com.gu.crier.model.event.v1.EventPayload.{ Atom, UnknownUnionField }
+import com.gu.contentapi.firehose.kinesis.{KinesisStreamReader, KinesisStreamReaderConfig, SingleEventProcessor}
+import com.gu.crier.model.event.v1.EventPayload.UnknownUnionField
 import com.gu.crier.model.event.v1.EventType.EnumUnknownEventType
-import com.gu.crier.model.event.v1.{ Event, EventPayload, EventType }
+import com.gu.crier.model.event.v1.{Event, EventPayload, EventType}
 import com.twitter.scrooge.ThriftStructCodec
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider
-import software.amazon.kinesis.lifecycle.{ ShutdownReason }
-import software.amazon.kinesis.processor.{ ShardRecordProcessor, ShardRecordProcessorFactory }
+import software.amazon.kinesis.coordinator.CoordinatorConfig
+import software.amazon.kinesis.coordinator.CoordinatorConfig.ClientVersionConfig
+import software.amazon.kinesis.lifecycle.ShutdownReason
+import software.amazon.kinesis.processor.{ShardRecordProcessor, ShardRecordProcessorFactory}
 
 import scala.concurrent.duration._
 
@@ -16,7 +18,9 @@ class ContentApiFirehoseConsumer(
   val kinesisStreamReaderConfig: KinesisStreamReaderConfig,
   override val credentialsProvider: AwsCredentialsProvider,
   val streamListener: StreamListener,
-  val filterProductionMonitoring: Boolean = false) extends KinesisStreamReader {
+  val filterProductionMonitoring: Boolean = false,
+  val clientVersionCompatibility: CoordinatorConfig.ClientVersionConfig = ClientVersionConfig.CLIENT_VERSION_CONFIG_COMPATIBLE_WITH_2X // see https://github.com/guardian/content-api-firehose-client/pull/56
+) extends KinesisStreamReader {
 
   lazy val eventProcessorFactory = new ShardRecordProcessorFactory {
     override def shardRecordProcessor(): ShardRecordProcessor = new ContentApiEventProcessor(filterProductionMonitoring, kinesisStreamReaderConfig.checkpointInterval, kinesisStreamReaderConfig.maxCheckpointBatchSize, streamListener)

@@ -9,6 +9,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
 import software.amazon.kinesis.common.KinesisClientUtil.createKinesisAsyncClient
 import software.amazon.kinesis.common.{ ConfigsBuilder, InitialPositionInStream, KinesisRequestsBuilder }
+import software.amazon.kinesis.coordinator.CoordinatorConfig.ClientVersionConfig
 import software.amazon.kinesis.coordinator.Scheduler
 import software.amazon.kinesis.processor.ShardRecordProcessorFactory
 
@@ -34,6 +35,7 @@ object KinesisStreamReader {
 trait KinesisStreamReader {
   val credentialsProvider: AwsCredentialsProvider
   val kinesisStreamReaderConfig: KinesisStreamReaderConfig
+  val clientVersionCompatibility: ClientVersionConfig
   protected val eventProcessorFactory: ShardRecordProcessorFactory
 
   /* only applies when there are no checkpoints */
@@ -57,7 +59,7 @@ trait KinesisStreamReader {
 
   lazy val scheduler: Scheduler = new Scheduler(
     configsBuilder.checkpointConfig(),
-    configsBuilder.coordinatorConfig(),
+    configsBuilder.coordinatorConfig().clientVersionConfig(clientVersionCompatibility),
     configsBuilder.leaseManagementConfig(),
     configsBuilder.lifecycleConfig(),
     configsBuilder.metricsConfig(),
