@@ -41,7 +41,7 @@ libraryDependencies ++= Seq(
 
 val jacksonVersion = "2.17.2"
 dependencyOverrides ++= Seq(
-  "com.charleskorn.kaml" % "kaml" % "0.53.0",
+  "com.charleskorn.kaml" % "kaml" % "0.104.0",
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
