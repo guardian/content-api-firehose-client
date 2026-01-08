@@ -34,7 +34,7 @@ libraryDependencies ++= Seq(
   "com.gu" %% "content-api-models-scala" % "32.0.0",
   "com.gu" %% "thrift-serializer" % "5.0.7",
   "software.amazon.kinesis" % "amazon-kinesis-client" % "3.2.1",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.6",
   "com.twitter" %% "scrooge-core" % "21.12.0",
   "org.scalatest" %% "scalatest" % "3.2.19" % Test
 ) ++ Seq("aws-json-protocol", "kinesis").map(artifact => "software.amazon.awssdk" % artifact % "2.29.47")
