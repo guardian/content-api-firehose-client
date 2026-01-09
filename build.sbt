@@ -36,8 +36,16 @@ libraryDependencies ++= Seq(
   "software.amazon.kinesis" % "amazon-kinesis-client" % "3.2.1",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.twitter" %% "scrooge-core" % "21.12.0",
+  "at.yawk.lz4" % "lz4-java" % "1.10.2", // https://github.com/advisories/GHSA-cmp6-m4wj-q63q
   "org.scalatest" %% "scalatest" % "3.2.19" % Test
 ) ++ Seq("aws-json-protocol", "kinesis").map(artifact => "software.amazon.awssdk" % artifact % "2.29.47")
+
+excludeDependencies ++= Seq(
+  ExclusionRule(
+    organization = "org.lz4", // https://github.com/advisories/GHSA-cmp6-m4wj-q63q
+    name = "lz4-java"
+  )
+)
 
 val jacksonVersion = "2.17.2"
 dependencyOverrides ++= Seq(
@@ -47,6 +55,5 @@ dependencyOverrides ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
   "org.json" % "json" % "20231013",
   "org.xerial.snappy" % "snappy-java" % "1.1.10.4",
-  "org.apache.commons" % "commons-compress" % "1.26.0",
-  "org.lz4" % "lz4-java" % "1.8.1" //overriding until a version of amazon-kinesis-client removes the vuln in 1.8.0
+  "org.apache.commons" % "commons-compress" % "1.26.0"
 )
