@@ -55,5 +55,5 @@ dependencyOverrides ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
   "org.json" % "json" % "20231013",
   "org.xerial.snappy" % "snappy-java" % "1.1.10.4",
-  "org.apache.commons" % "commons-compress" % "1.26.0"
+  "org.apache.commons" % "commons-compress" % "1.26.2"
 )
