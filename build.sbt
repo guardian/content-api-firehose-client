@@ -36,7 +36,7 @@ libraryDependencies ++= Seq(
   "software.amazon.kinesis" % "amazon-kinesis-client" % "3.2.1",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.twitter" %% "scrooge-core" % "21.12.0",
-  "at.yawk.lz4" % "lz4-java" % "1.10.2", // https://github.com/advisories/GHSA-cmp6-m4wj-q63q
+  "at.yawk.lz4" % "lz4-java" % "1.10.3", // https://github.com/advisories/GHSA-cmp6-m4wj-q63q
   "org.scalatest" %% "scalatest" % "3.2.19" % Test
 ) ++ Seq("aws-json-protocol", "kinesis").map(artifact => "software.amazon.awssdk" % artifact % "2.29.47")
 
