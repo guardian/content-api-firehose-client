@@ -47,7 +47,7 @@ excludeDependencies ++= Seq(
   )
 )
 
-val jacksonVersion = "2.17.2"
+val jacksonVersion = "2.17.3"
 dependencyOverrides ++= Seq(
   "com.charleskorn.kaml" % "kaml" % "0.53.0",
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
