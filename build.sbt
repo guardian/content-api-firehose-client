@@ -33,7 +33,7 @@ val jacksonVersion = "2.17.2"
 libraryDependencies ++= Seq(
   "com.gu" %% "content-api-models-scala" % "37.0.0",
   "com.gu" %% "thrift-serializer" % "5.0.7",
-  "software.amazon.kinesis" % "amazon-kinesis-client" % "3.2.1",
+  "software.amazon.kinesis" % "amazon-kinesis-client" % "3.4.2",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.twitter" %% "scrooge-core" % "21.12.0",
   "at.yawk.lz4" % "lz4-java" % "1.10.4", // Necessary while the ExclusionRule for org.lz4:lz4-java is necessary
