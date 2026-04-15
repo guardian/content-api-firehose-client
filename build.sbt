@@ -3,8 +3,8 @@ import sbtversionpolicy.withsbtrelease.ReleaseVersion
 
 name:= "content-api-firehose-client"
 organization := "com.gu"
-scalaVersion := "2.12.20"
-crossScalaVersions := Seq(scalaVersion.value, "2.13.15")
+scalaVersion := "2.12.21"
+crossScalaVersions := Seq(scalaVersion.value, "2.13.18")
 scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-Xfatal-warnings", "-release:11")
 Compile / doc / scalacOptions  := Nil
 
@@ -34,10 +34,10 @@ libraryDependencies ++= Seq(
   "com.gu" %% "content-api-models-scala" % "37.0.0",
   "com.gu" %% "thrift-serializer" % "5.0.7",
   "software.amazon.kinesis" % "amazon-kinesis-client" % "3.2.1",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.6",
   "com.twitter" %% "scrooge-core" % "21.12.0",
   "at.yawk.lz4" % "lz4-java" % "1.10.4", // Necessary while the ExclusionRule for org.lz4:lz4-java is necessary
-  "org.scalatest" %% "scalatest" % "3.2.19" % Test,
+  "org.scalatest" %% "scalatest" % "3.2.20" % Test,
 
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
