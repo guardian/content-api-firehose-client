@@ -35,7 +35,7 @@ libraryDependencies ++= Seq(
   "com.gu" %% "thrift-serializer" % "5.0.7",
   "software.amazon.kinesis" % "amazon-kinesis-client" % "3.2.1",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
-  "com.twitter" %% "scrooge-core" % "21.12.0",
+  "com.twitter" %% "scrooge-core" % "24.2.0",
   "at.yawk.lz4" % "lz4-java" % "1.10.4", // Necessary while the ExclusionRule for org.lz4:lz4-java is necessary
   "org.scalatest" %% "scalatest" % "3.2.19" % Test,
 
