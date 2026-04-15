@@ -1,16 +1,16 @@
 package com.gu.contentapi.firehose
 
 import com.gu.contentapi.firehose.client.StreamListener
-import com.gu.contentapi.firehose.kinesis.{KinesisStreamReader, KinesisStreamReaderConfig, SingleEventProcessor}
+import com.gu.contentapi.firehose.kinesis.{ KinesisStreamReader, KinesisStreamReaderConfig, SingleEventProcessor }
 import com.gu.crier.model.event.v1.EventPayload.UnknownUnionField
 import com.gu.crier.model.event.v1.EventType.EnumUnknownEventType
-import com.gu.crier.model.event.v1.{Event, EventPayload, EventType}
+import com.gu.crier.model.event.v1.{ Event, EventPayload, EventType }
 import com.twitter.scrooge.ThriftStructCodec
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider
 import software.amazon.kinesis.coordinator.CoordinatorConfig
 import software.amazon.kinesis.coordinator.CoordinatorConfig.ClientVersionConfig
 import software.amazon.kinesis.lifecycle.ShutdownReason
-import software.amazon.kinesis.processor.{ShardRecordProcessor, ShardRecordProcessorFactory}
+import software.amazon.kinesis.processor.{ ShardRecordProcessor, ShardRecordProcessorFactory }
 
 import scala.concurrent.duration._
 
