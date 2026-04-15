@@ -37,7 +37,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.6",
   "com.twitter" %% "scrooge-core" % "21.12.0",
   "at.yawk.lz4" % "lz4-java" % "1.10.4", // Necessary while the ExclusionRule for org.lz4:lz4-java is necessary
-  "org.scalatest" %% "scalatest" % "3.2.19" % Test,
+  "org.scalatest" %% "scalatest" % "3.2.20" % Test,
 
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
